@@ -1,0 +1,11 @@
+{
+  "name": "chainalyze",
+  "version": "1.0.0",
+  "description": "A cryptocurrency analytics and data aggregation tool paired with a portfolio tracker.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "george burt",
+  "license": "ISC"
+}
