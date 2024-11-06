@@ -1,16 +1,18 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 
+import dotenv from 'dotenv';
 import router from './router';
 
 const app = express();
-const PORT = 3000;
+dotenv.config();
+const PORT = process.env.PORT || 3001;
 
 app.use(cors())
 app.use(express.json());
 
 app.use(router);
-app.use(function(req, res){
+app.use('/', async (req: Request<any>, res: Response<any>): Promise<any> => {
   return res.status(404).json({ error: 'Not found'});
 });
 
