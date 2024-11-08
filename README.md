@@ -1,1 +1,1 @@
-# Chainalyze
+![Chainalyze](./assets/images/chainalyze.png)
