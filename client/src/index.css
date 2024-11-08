@@ -2,30 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: 'San Francisco Pro';
-  src: url('/fonts/SF-Pro-Text-Light.otf') format('truetype');
-  font-weight: lighter;
-  font-style: normal;
+
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-@font-face {
-  font-family: 'San Francisco Pro';
-  src: url('/fonts/SF-Pro.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+::-webkit-scrollbar-track {
+  background-color: #e5e7eb !important;
 }
 
-@font-face {
-  font-family: 'San Francisco Pro';
-  src: url('/fonts/SF-Pro-Text-Semibold.otf') format('truetype');
-  font-weight: bolder;
-  font-style: normal;
+::-webkit-scrollbar-thumb {
+  background-color: #9ca3af !important;
+  border-radius: 4px;
 }
 
-@font-face {
-  font-family: 'San Francisco Pro';
-  src: url('/fonts/SF-Pro-Text-Bold.otf') format('truetype');
-  font-weight: bold;
-  font-style: normal;
+.dark ::-webkit-scrollbar-track {
+  background-color: #374151 !important;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #6b7280 !important;
 }

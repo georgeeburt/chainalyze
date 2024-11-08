@@ -1,0 +1,27 @@
+@font-face {
+  font-family: 'San Francisco Pro';
+  src: url('/fonts/SF-Pro-Text-Light.otf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'San Francisco Pro';
+  src: url('/fonts/SF-Pro.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'San Francisco Pro';
+  src: url('/fonts/SF-Pro-Text-Semibold.otf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'San Francisco Pro';
+  src: url('/fonts/SF-Pro-Text-Bold.otf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
