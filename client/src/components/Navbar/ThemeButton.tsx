@@ -1,6 +1,6 @@
 import ThemeButtonProps from '../../types/props/ThemeButtonProps';
 
-function ThemeButton({ isDarkMode, setIsDarkMode }: ThemeButtonProps) {
+const ThemeButton = ({ isDarkMode, setIsDarkMode }: ThemeButtonProps) => {
   const toggleDarkMode = () => {
     setIsDarkMode((prev: boolean) => !prev);
   };
@@ -63,6 +63,6 @@ function ThemeButton({ isDarkMode, setIsDarkMode }: ThemeButtonProps) {
       )}
     </>
   );
-}
+};
 
 export default ThemeButton;

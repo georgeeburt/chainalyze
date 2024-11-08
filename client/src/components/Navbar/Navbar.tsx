@@ -17,7 +17,6 @@ const Navbar = () => {
     }
   }, []);
 
-
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
