@@ -15,7 +15,7 @@ const TokenList = () => {
   const livePriceData = useTradeSocket(tokens);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchInitialData = async () => {
       try {
         // Fetch tokens
         const response = await fetch('http://localhost:3001/api/tokens');
@@ -55,7 +55,7 @@ const TokenList = () => {
         setLoading(false);
       }
     };
-    fetchData();
+    fetchInitialData();
   }, []);
 
   useEffect(() => {
@@ -89,7 +89,7 @@ const TokenList = () => {
           <th className="pl-4 w-3/12">Name</th>
           <th className="w-2/12">Price</th>
           <th className="w-3/12">Market Cap</th>
-          <th className="w-/12">Price Change (24h)</th>
+          <th className="w-3/12">Price Change % (24h)</th>
         </tr>
       </thead>
       <tbody>

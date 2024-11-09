@@ -39,11 +39,11 @@ const Navbar = () => {
           />
         </Link>
         <div className="flex items-center gap-12">
-          <ul className="flex content-center gap-7 text-2xl">
-            <li>
+          <ul className="flex content-center gap-5 text-2xl font-semibold">
+            <li className='hover:bg-sterling dark:hover:bg-darknavhov rounded-lg p-2'>
               <Link to="/">Discover</Link>
             </li>
-            <li>
+            <li className='hover:bg-sterling dark:hover:bg-darknavhov rounded-lg p-2'>
               Portfolio
             </li>
           </ul>
