@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import ThemeButton from './ThemeButton';
 import logo from '../../assets/chainalyze.svg';
 import darkLogo from '../../assets/chainalyze-dark.svg';
@@ -30,15 +31,21 @@ const Navbar = () => {
   return (
     <header className="bg-lightnav dark:bg-darknav w-screen px-[10%] py-[0.5%]">
       <nav className="flex gap-[30%] justify-between items-center">
-        <img
-          src={isDarkMode ? darkLogo : logo}
-          className="w-52"
-          alt="Chainalyze Logo"
-        />
+        <Link to="/">
+          <img
+            src={isDarkMode ? darkLogo : logo}
+            className="w-52"
+            alt="Chainalyze Logo"
+          />
+        </Link>
         <div className="flex items-center gap-12">
           <ul className="flex content-center gap-7 text-2xl">
-            <a href="#">Discover</a>
-            <a href="#">Portfolio</a>
+            <li>
+              <Link to="/">Discover</Link>
+            </li>
+            <li>
+              Portfolio
+            </li>
           </ul>
           <ThemeButton isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
         </div>

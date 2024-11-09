@@ -1,4 +1,4 @@
-export const formatCurrency = (value: number): string => {
+export const formatPrice = (value: number): string => {
   const subscriptDigits: Record<string, string> = {
     '0': '₀',
     '1': '₁',
@@ -17,7 +17,7 @@ export const formatCurrency = (value: number): string => {
     style: "currency",
     currency: "USD",
     minimumFractionDigits: 2,
-    maximumFractionDigits: 6,
+    maximumFractionDigits: 4,
   }).format(value);
 
   // Check if the number is small

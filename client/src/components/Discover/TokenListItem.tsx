@@ -1,6 +1,7 @@
 import TokenListItemProps from '../../types/props/TokenListItemProps';
-import { formatCurrency } from '../../utils/formatCurrency';
+import { formatPrice } from '../../utils/formatPrice';
 import { formatPriceChange } from '../../utils/formatPriceChange';
+import { formatMarketCap } from '../../utils/formatMarketCap';
 
 const TokenListItem = ({
   token,
@@ -28,10 +29,10 @@ const TokenListItem = ({
       </td>
       <td>
         {priceData?.price < 1
-          ? formatCurrency(priceData?.price)
-          : formatCurrency(priceData?.price)}
+          ? formatPrice(priceData?.price)
+          : formatPrice(priceData?.price)}
       </td>
-      <td>{formatCurrency(priceData?.marketCap)}</td>
+      <td>{formatMarketCap(priceData?.marketCap)}</td>
       <td
         className={`rounded-r-lg ${
           priceData.priceChange < 0 ? 'text-red' : 'text-forest'
