@@ -12,6 +12,7 @@ export default {
         'grape': '#5E1AEB',
         'darkbtn': '#404040',
         'darkbtnhov': '#525252',
+        'forest': '#00A508',
         'gunmetal': '#687182',
         'lightbtn': '#d6d6d6',
         'lightbtnhov': '#c4c4c4',
@@ -21,7 +22,8 @@ export default {
         'stone': '#b5b5b5',
         'darkbg': '#2D2D2D',
         'darknav': '#202020',
-        'darklabel': '#3F3F3F'
+        'darklabel': '#3F3F3F',
+        'red': '#FF3C3C'
       },
       dropShadow: {
         'med': '0 7px 7px rgba(0, 0, 0, 0.10)',

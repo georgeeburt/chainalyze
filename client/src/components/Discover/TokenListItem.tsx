@@ -1,7 +1,13 @@
 import TokenListItemProps from '../../types/props/TokenListItemProps';
 import { formatCurrency } from '../../utils/formatCurrency';
+import { formatPriceChange } from '../../utils/formatPriceChange';
 
-const TokenListItem = ({ token, metadata, rank, priceData }: TokenListItemProps) => {
+const TokenListItem = ({
+  token,
+  metadata,
+  rank,
+  priceData
+}: TokenListItemProps) => {
   return (
     <tr key={token.id} className="border-b bg-slate dark:bg-darklabel">
       <td className="font-light text-gunmetal dark:text-stone rounded-l-lg p-4">
@@ -26,7 +32,13 @@ const TokenListItem = ({ token, metadata, rank, priceData }: TokenListItemProps)
           : formatCurrency(priceData?.price)}
       </td>
       <td>{formatCurrency(priceData?.marketCap)}</td>
-      <td className="rounded-r-lg">{formatCurrency(priceData?.volume)}</td>
+      <td
+        className={`rounded-r-lg ${
+          priceData.priceChange < 0 ? 'text-red' : 'text-forest'
+        }`}
+      >
+        {formatPriceChange(priceData.priceChange)}
+      </td>
     </tr>
   );
 };
