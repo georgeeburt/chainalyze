@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Token from '../types/api/Token';
 
 const useTradeSocket = (tokens: Token[]) => {
-  const [priceData, setPriceData] = useState<Record<string, { price: number; marketCap: number }>>({});
+  const [priceData, setPriceData] = useState<Record<string, { price: number; marketCap: number, volume: number }>>({});
   useEffect(() => {
     if (tokens.length === 0) return;
 
@@ -15,20 +15,19 @@ const useTradeSocket = (tokens: Token[]) => {
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
+      console.log(data);
       if (data.e === '24hrTicker') {
         // Find the circulating supply for the token
         const token = tokens.find(token => token.symbol + 'USDT' ===  data.s);
         if (token) {
-          const price = parseFloat(data.c); // Current price from the WebSocket
-          const circulatingSupply = token.circulating_supply; // Circulating supply from your token data
-          const marketCap = price * circulatingSupply; // Calculate market cap
-
+          const price = parseFloat(data.c);
+          const marketCap = price * token.circulating_supply;
           setPriceData((prevData) => ({
             ...prevData,
             [data.s]: {
               price: price,
-              marketCap: marketCap, // Set calculated market cap
-              volume: parseFloat(data.v),
+              marketCap: marketCap,
+              volume: parseFloat(data.q),
             },
           }));
         }

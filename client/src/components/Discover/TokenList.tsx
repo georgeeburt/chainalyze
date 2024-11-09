@@ -11,7 +11,7 @@ const TokenList = () => {
   const [loading, setLoading] = useState(true);
   const [prices, setPrices] = useState<Record<string, { price: number; marketCap: number; volume: number }>>({});
 
-  // Use the custom hook to get live price data
+  // Use custom hook to get live price data
   const livePriceData = useTradeSocket(tokens);
 
   useEffect(() => {
@@ -37,7 +37,6 @@ const TokenList = () => {
           };
           return acc;
         }, {});
-
         setPrices(priceData);
         setLoading(false);
       } catch (error) {
@@ -51,12 +50,12 @@ const TokenList = () => {
   useEffect(() => {
     setPrices((prevPrices) => {
       const updatedPrices = { ...prevPrices };
-
       Object.keys(livePriceData).forEach((symbol) => {
         updatedPrices[symbol] = {
           ...updatedPrices[symbol],
           price: livePriceData[symbol].price ?? updatedPrices[symbol].price,
           marketCap: livePriceData[symbol].marketCap ?? updatedPrices[symbol].marketCap,
+          volume: livePriceData[symbol].volume ?? updatedPrices[symbol].volume
         };
       });
 
@@ -82,7 +81,7 @@ const TokenList = () => {
       <tbody>
         {tokens.map((token, index) => {
           const tokenMetadata = metadata[index];
-          const priceInfo = prices[token.symbol] || { price: 0, marketCap: 0, volume: 0 };
+          const priceInfo = prices[token.symbol + 'USDT'] || prices[token.symbol];
           return (
             <TokenListItem
               key={token.id}
