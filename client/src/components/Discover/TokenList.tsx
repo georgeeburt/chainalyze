@@ -3,7 +3,7 @@ import Token from '../../types/api/Token';
 import Metadata from '../../types/api/Metadata';
 import TokenListItem from './TokenListItem';
 import { PriceData } from '../../types/sockets/PriceData';
-import useTradeSocket from '../../hooks/useTradeSocket';
+import useDiscoverSocket from '../../hooks/useDiscoverSocket';
 
 const TokenList = () => {
   const [tokens, setTokens] = useState<Token[]>([]);
@@ -12,7 +12,7 @@ const TokenList = () => {
   const [prices, setPrices] = useState<Record<string, PriceData>>({});
 
   // Use custom hook to get live price data
-  const livePriceData = useTradeSocket(tokens);
+  const livePriceData = useDiscoverSocket(tokens);
 
   useEffect(() => {
     const fetchInitialData = async () => {

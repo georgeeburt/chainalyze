@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import Token from '../types/api/Token';
 import { PriceData } from '../types/sockets/PriceData';
 
-const useTradeSocket = (tokens: Token[]) => {
+const useDiscoverSocket = (tokens: Token[]) => {
   const [priceData, setPriceData] = useState<Record<string, PriceData>>({});
   useEffect(() => {
     if (tokens.length === 0) return;
 
-    const streamUrl = `wss://stream.binance.com:9443/ws/${tokens.map(token => `${token.symbol.toLowerCase()}usdt@ticker`).join('/')}`;
+    const streamUrl = `wss://stream.binance.com:9443/ws/${tokens
+      .map(token => `${token.symbol.toLowerCase()}usdt@ticker`)
+      .join('/')}`;
     const socket = new WebSocket(streamUrl);
 
     socket.onopen = () => {
@@ -50,4 +52,4 @@ const useTradeSocket = (tokens: Token[]) => {
   return priceData;
 };
 
-export default useTradeSocket;
+export default useDiscoverSocket;

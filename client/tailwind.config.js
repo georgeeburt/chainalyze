@@ -7,6 +7,9 @@ export default {
   ],
   theme: {
     extend: {
+      animation: {
+        loading: 'loadingAnimation 1.5s infinite linear',
+      },
       colors: {
         'grape': '#5E1AEB',
         'darkbtn': '#404040',
@@ -27,7 +30,10 @@ export default {
         'slate': '#F5F5F5',
         'stone': '#b5b5b5',
         'silver': '#eeeeee',
-        'red': '#FF3C3C'
+        'red': '#FF3C3C',
+        'gradient-start': 'rgba(255, 255, 255, 0.2)',
+        'gradient-middle': 'rgba(255, 255, 255, 0.6)',
+        'gradient-end': 'rgba(255, 255, 255, 0.2)'
       },
       dropShadow: {
         'med': '0 7px 7px rgba(0, 0, 0, 0.10)',
@@ -44,6 +50,16 @@ export default {
       },
       fontFamily: {
         custom: ['San Francisco Pro', 'sans-serif'],
+      },
+      keyframes: {
+        loadingAnimation: {
+          '0%': {
+            'background-position': '-400px 0',
+          },
+          '100%': {
+            'background-position': '400px 0',
+          },
+        },
       },
     },
   },
