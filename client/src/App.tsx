@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Discover from './components/Discover/Discover';
 import Navbar from './components/Navbar/Navbar';
-import TokenOverview from './components/TokenOverview';
+import TokenOverview from './components/TokenOverview/TokenOverview';
 import './App.css';
 
 const App = () => {

@@ -78,7 +78,11 @@ const TokenList = () => {
   }, [livePriceData]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-[80vh] mt-[-4rem]">
+        <div className="w-12 h-12 border-4 border-elixir border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
   }
 
   return (

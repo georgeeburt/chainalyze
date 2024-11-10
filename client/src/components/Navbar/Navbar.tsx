@@ -5,15 +5,17 @@ import logo from '../../assets/chainalyze.svg';
 import darkLogo from '../../assets/chainalyze-dark.svg';
 
 const Navbar = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  // Initialize the theme based on localStorage, without using React state initially
+  const initialTheme = localStorage.getItem('theme') === 'dark';
+
+  // State for toggling theme after the initial load
+  const [isDarkMode, setIsDarkMode] = useState(initialTheme);
 
   useEffect(() => {
-    const userTheme = localStorage.getItem('theme');
-    if (userTheme === 'dark') {
-      setIsDarkMode(true);
+    // Apply theme class directly when component mounts
+    if (initialTheme) {
       document.documentElement.classList.add('dark');
     } else {
-      setIsDarkMode(false);
       document.documentElement.classList.remove('dark');
     }
   }, []);
@@ -40,10 +42,10 @@ const Navbar = () => {
         </Link>
         <div className="flex items-center gap-12">
           <ul className="flex content-center gap-5 text-2xl font-semibold">
-            <li className='hover:bg-sterling dark:hover:bg-darknavhov rounded-lg p-2'>
+            <li className="hover:bg-sterling dark:hover:bg-darknavhov rounded-lg p-2">
               <Link to="/">Discover</Link>
             </li>
-            <li className='hover:bg-sterling dark:hover:bg-darknavhov rounded-lg p-2'>
+            <li className="hover:bg-sterling dark:hover:bg-darknavhov rounded-lg p-2">
               Portfolio
             </li>
           </ul>

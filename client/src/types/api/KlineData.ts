@@ -9,5 +9,6 @@ export type KlineData = [
   string,
   number,
   string,
+  string,
   string
 ];
