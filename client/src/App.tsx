@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { MetadataProvider } from './components/contexts/MetadataContext';
 import Discover from './components/Discover/Discover';
 import Navbar from './components/Navbar/Navbar';
 import TokenOverview from './components/TokenOverview/TokenOverview';
@@ -10,11 +11,13 @@ const App = () => {
     <Router>
       <div className="flex flex-col">
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Discover />} />
-          <Route path="/token/:id" element={<TokenOverview />} />
-          <Route path="/portfolio" element={<Portfolio />} />
-        </Routes>
+        <MetadataProvider>
+          <Routes>
+            <Route path="/" element={<Discover />} />
+            <Route path="/token/:id" element={<TokenOverview />} />
+            <Route path="/portfolio" element={<Portfolio />} />
+          </Routes>
+        </MetadataProvider>
       </div>
     </Router>
   );
