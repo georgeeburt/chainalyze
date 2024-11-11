@@ -16,27 +16,33 @@ const useDiscoverSocket = (tokens: Token[]) => {
       console.log('WebSocket connection opened');
     };
 
-    socket.onmessage = (event) => {
+    socket.onmessage = event => {
       const data = JSON.parse(event.data);
+
+      if (data.ping) {
+        socket.send(JSON.stringify({ pong: data.ping }));
+        return;
+      }
+
       if (data.e === '24hrTicker') {
         // Find the circulating supply for the token
-        const token = tokens.find(token => token.symbol + 'USDT' ===  data.s);
+        const token = tokens.find(token => token.symbol + 'USDT' === data.s);
         if (token) {
           const price = parseFloat(data.c);
           const marketCap = price * token.circulating_supply;
-          setPriceData((prevData) => ({
+          setPriceData(prevData => ({
             ...prevData,
             [data.s]: {
               price: price,
               marketCap: marketCap,
               priceChange: data.P
-            },
+            }
           }));
         }
       }
     };
 
-    socket.onerror = (error) => {
+    socket.onerror = error => {
       console.error('WebSocket error:', error);
     };
 

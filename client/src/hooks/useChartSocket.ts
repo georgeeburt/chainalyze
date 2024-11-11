@@ -11,6 +11,12 @@ const useChartSocket = (symbol: string) => {
 
     socket.onmessage = (event) => {
       const receivedData = JSON.parse(event.data);
+
+      if (receivedData.ping) {
+      socket.send(JSON.stringify({ pong: receivedData.ping }));
+        return;
+      }
+
       setData((prevData) => [
         ...prevData,
         receivedData
