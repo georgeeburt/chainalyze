@@ -7,6 +7,8 @@ import Metadata from '../../types/api/Metadata';
 import { KlineData } from '../../types/api/KlineData';
 import Token from '../../types/api/Token';
 import { formatPriceChange } from '../../utils/formatPriceChange';
+import { formatPrice } from '../../utils/formatPrice';
+import { formatMarketCap } from '../../utils/formatMarketCap';
 
 const TokenOverview = () => {
   const { id } = useParams();
@@ -102,22 +104,22 @@ const TokenOverview = () => {
           </h1>
         </div>
         <div className="flex flex-wrap text-center gap-6 text-black text-lg">
-          <div className="bg-lilac rounded-lg p-4">
+          <div className="bg-elixir rounded-lg p-4">
             <h2 className="font-semibold">Price</h2>
-            <p>{tokenData.quote.USD.price}</p>
+            <p>{formatPrice(tokenData.quote.USD.price)}</p>
           </div>
-          <div className="bg-lilac rounded-lg p-4">
+          <div className="bg-elixir rounded-lg p-4">
             <h2 className="font-semibold">Volume (24hr)</h2>
-            <p>{tokenData.quote.USD.volume_24h}</p>
+            <p>{formatMarketCap(tokenData.quote.USD.volume_24h)}</p>
           </div>
-          <div className="bg-lilac rounded-lg p-4">
+          <div className="bg-elixir rounded-lg p-4">
             <h2 className="font-semibold">Market Cap</h2>
-            <p>{tokenData.quote.USD.market_cap}</p>
+            <p>{formatMarketCap(tokenData.quote.USD.market_cap)}</p>
           </div>
-          <div className="bg-lilac rounded-lg p-4">
+          <div className="bg-elixir rounded-lg p-4">
             <h2 className="font-semibold">Circulating Supply</h2>
             <p>
-              {tokenData.circulating_supply}{' '}
+              {tokenData.circulating_supply.toLocaleString()}{' '}
               <span className="text-darklabel">{tokenMetadata.symbol}</span>
             </p>
           </div>
