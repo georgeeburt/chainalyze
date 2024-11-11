@@ -16,9 +16,10 @@ const TokenList = () => {
 
   useEffect(() => {
     const fetchInitialData = async () => {
+      const baseUrl = 'http://localhost:3001/api/';
       try {
         // Fetch tokens
-        const response = await fetch('http://localhost:3001/api/tokens');
+        const response = await fetch(`${baseUrl}tokens`);
         if (!response.ok) throw new Error('Failed to fetch tokens');
         const tokenData = await response.json();
         setTokens(tokenData.data);
@@ -28,7 +29,7 @@ const TokenList = () => {
           .map((token: Token) => token.id)
           .join(',');
         const metadataResponse = await fetch(
-          `http://localhost:3001/api/metadata?id=${tokenIds}`
+          `${baseUrl}metadata?id=${tokenIds}`
         );
         const metadataData = await metadataResponse.json();
         setMetadata(
@@ -88,7 +89,7 @@ const TokenList = () => {
   return (
     <table className="table-auto w-full text-left border-separate border-spacing-y-[2vh]">
       <thead>
-        <tr>
+        <tr className='text-xl '>
           <th className="pl-4 w-1/12">#</th>
           <th className="pl-4 w-3/12">Name</th>
           <th className="w-2/12">Price</th>
