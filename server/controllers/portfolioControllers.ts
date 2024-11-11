@@ -18,23 +18,25 @@ export const getPortfolio = async (req: Request, res: Response): Promise<any> =>
 // Add a token to Portfolio
 export const addToken = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { token, quantity } = req.body;
+    const { name: tokenName, symbol, quantity } = req.body;
 
-    if (!token || !quantity ) {
-      return res.status(400).json({ error: 'Token and quantity are required.' });
+    if (!tokenName || !symbol || !quantity) {
+      return res.status(400).json({ error: 'Token name, symbol, and quantity are required.' });
     }
-
     const portfolio = await Portfolio.findOneAndUpdate(
       {},
       {
         $push: {
-          holdings: { token, quantity },
+          holdings: {
+            token: { name: tokenName, symbol: symbol },
+            quantity: quantity,
+          },
         },
       },
       { new: true, upsert: true }
     );
 
-    return res.status(201).json({ message: 'Token added to portfolio:', portfolio })
+    return res.status(201).json({ message: 'Token added to portfolio:', portfolio });
   } catch (error) {
     console.error('Error adding token to Portfolio:', error);
     return res.status(500).json({ error: 'Internal server error.' });
@@ -43,8 +45,8 @@ export const addToken = async (req: Request, res: Response): Promise<any> => {
 
 // Update a token's quanity in Portfolio
 export const updateToken = async (req: Request, res: Response): Promise<any> => {
-  const { token, quantity } = req.body;
-  if (!token || !quantity) {
+  const { name: tokenName, symbol, quantity } = req.body;
+  if (!tokenName || !symbol || !quantity) {
     return res.status(400).json({ error: 'Token and quantity are required.' });
   }
   try {
@@ -53,7 +55,7 @@ export const updateToken = async (req: Request, res: Response): Promise<any> => 
       return res.status(404).json({ error: 'Portfolio not found.' })
     }
     const tokenIndex = portfolio.holdings.findIndex(
-      (item) => item.token === token
+      (item) => item.token === tokenName
     );
 
     if (tokenIndex === -1) {
@@ -69,19 +71,21 @@ export const updateToken = async (req: Request, res: Response): Promise<any> => 
 
 // Remove a token from Portfolio
 export const removeToken = async (req: Request, res: Response): Promise<any> => {
-  const { token } = req.body;
+  const { name: tokenName } = req.body;
 
-  if (!token) {
-    return res.status(400).json({ error: 'Token is required.' });
+  if (!tokenName) {
+    return res.status(400).json({ error: 'Token name is required.' });
   }
+
   try {
     const portfolio = await Portfolio.findOne({});
+
     if (!portfolio) {
       return res.status(404).json({ error: 'Portfolio not found.' });
     }
 
     const tokenIndex = portfolio.holdings.findIndex(
-      (item) => item.token === token
+      (item) => item.token && item.token.name === tokenName
     );
 
     if (tokenIndex === -1) {
@@ -91,9 +95,12 @@ export const removeToken = async (req: Request, res: Response): Promise<any> => 
     portfolio.holdings.splice(tokenIndex, 1);
     await portfolio.save();
 
-    return res.status(200).json({ message: 'Token successfully deleted from Portfolio.' })
+    return res.status(200).json({
+      message: 'Token successfully deleted from Portfolio.',
+      portfolio: portfolio,
+    });
   } catch (error) {
-   console.error('Error removing token from Portfolio:', error);
-   return res.status(500).json({ error: 'Internal server error.' });
+    console.error('Error removing token from Portfolio:', error);
+    return res.status(500).json({ error: 'Internal server error.' });
   }
 };

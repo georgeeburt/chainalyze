@@ -19,23 +19,25 @@ const Portfolio = () => {
 
   const baseUrl = 'http://localhost:3001';
 
-  // Handlers
+  // Selected token input handler
   const handleTokenChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedToken(event.target.value);
   };
 
+  // Quantity change handler
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuantity(event.target.value);
   };
 
-  const handleDeleteToken = async (token: string) => {
+  // Delete token Handler
+  const handleDeleteToken = async (tokenName: string) => {
     try {
       const response = await fetch(`${baseUrl}/portfolio`, {
         method: 'DELETE',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ token })
+        body: JSON.stringify({ name: tokenName }),
       });
 
       if (!response.ok) {
@@ -45,9 +47,9 @@ const Portfolio = () => {
         setMessage('Token successfully deleted.');
         setMessageType('success');
 
-
+        // Filter portfolio state based on token name
         setUserPortfolio(prevPortfolio =>
-          prevPortfolio.filter(item => item.token !== token)
+          prevPortfolio.filter(item => item.token.name !== tokenName)
         );
       }
     } catch (error) {
@@ -57,6 +59,7 @@ const Portfolio = () => {
     }
   };
 
+  // Submit token handler
   const handleTokenSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const quantityValue = Number(quantity);
@@ -69,11 +72,25 @@ const Portfolio = () => {
       return;
     }
 
+    const selectedTokenObj = tokenList.find(
+      token => token.symbol === selectedToken
+    );
+
+    if (!selectedTokenObj) {
+      setMessage('Token not found.');
+      setMessageType('error');
+      return;
+    }
+
     try {
       const response = await fetch(`${baseUrl}/portfolio`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: selectedToken, quantity: quantityValue })
+        body: JSON.stringify({
+          name: selectedTokenObj.name,
+          symbol: selectedTokenObj.symbol,
+          quantity: quantityValue
+        })
       });
 
       if (!response.ok) {
@@ -85,7 +102,7 @@ const Portfolio = () => {
 
         setUserPortfolio(prevPortfolio => [
           ...prevPortfolio,
-          { token: selectedToken, quantity: quantityValue }
+          { token: selectedTokenObj, quantity: quantityValue }
         ]);
       }
 
@@ -115,7 +132,7 @@ const Portfolio = () => {
     fetchPortfolio();
   }, []);
 
-  // Effects
+  // Hooks
   useEffect(() => {
     const fetchTokens = async () => {
       try {
@@ -177,7 +194,10 @@ const Portfolio = () => {
 
         <div className="flex flex-col flex-wrap gap-8 bg-lightnav dark:bg-darklabel rounded-md p-8">
           <h2 className="text-4xl">Add Tokens to Portfolio</h2>
-          <form onSubmit={handleTokenSubmit} className="flex gap-4 content-center">
+          <form
+            onSubmit={handleTokenSubmit}
+            className="flex gap-4 content-center"
+          >
             {/* Select Dropdown */}
             <select
               className="bg-lightlisthov text-black focus:border-elixir focus:border-2 hover:ring-1 hover:ring-elixir focus:outline-none rounded-md p-2"
@@ -206,9 +226,7 @@ const Portfolio = () => {
             />
 
             {/* Add Token Button */}
-            <button
-              className="dark:bg-elixir bg-elixir hover:bg-grape hover:dark:bg-purple-700 text-white p-2 rounded-md"
-            >
+            <button className="dark:bg-elixir bg-elixir hover:bg-grape hover:dark:bg-purple-700 text-white p-2 rounded-md">
               Add Tokens
             </button>
           </form>
@@ -220,18 +238,20 @@ const Portfolio = () => {
             <p className="text-xl">No current token holdings.</p>
           ) : (
             userPortfolio.map((holding, index) => (
-              <div className="flex gap-4">
-                <p key={index}>
-                  {holding.token} - Quantity: {holding.quantity}
+              <div className="flex gap-4" key={index}>
+                <p>
+                  {/* Render token name and symbol separately */}
+                  {holding?.token?.name} ({holding?.token?.symbol}) - Quantity:{' '}
+                  {holding.quantity}
                 </p>
                 <svg
-                  onClick={() => handleDeleteToken(holding.token)}
+                  onClick={() => handleDeleteToken(holding.token.name)} // Use token symbol to delete
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="size-6"
+                  className="size-6 cursor-pointer hover:text-red"
                 >
                   <path
                     strokeLinecap="round"

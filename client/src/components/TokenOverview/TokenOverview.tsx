@@ -6,9 +6,10 @@ import useChartSocket from '../../hooks/useChartSocket';
 import Metadata from '../../types/api/Metadata';
 import { KlineData } from '../../types/api/KlineData';
 import Token from '../../types/api/Token';
-import { formatPriceChange } from '../../utils/formatPriceChange';
-import { formatPrice } from '../../utils/formatPrice';
-import { formatMarketCap } from '../../utils/formatMarketCap';
+import { formatPriceChange } from '../../utils/formatters/formatPriceChange';
+import { formatPrice } from '../../utils/formatters/formatPrice';
+import { abbreviateCurrency } from '../../utils/numberAbbreviators/abbreviateCurrency';
+import { abbreviateNumber } from '../../utils/numberAbbreviators/abbreviateNumber';
 
 const TokenOverview = () => {
   const { id } = useParams();
@@ -179,7 +180,7 @@ const TokenOverview = () => {
               <h2 className="font-semibold">Market Cap</h2>
               <p className="font-light">
                 {liveData?.price && tokenData?.circulating_supply
-                  ? formatMarketCap(
+                  ? abbreviateNumber(
                       liveData.price * tokenData.circulating_supply
                     )
                   : 'Loading...'}
@@ -188,7 +189,7 @@ const TokenOverview = () => {
             <div className="bg-violet dark:bg-elixir rounded-lg p-4">
               <h2 className="font-semibold">Volume (24hr)</h2>
               <p className="font-light">
-                {formatMarketCap(tokenData.quote.USD.volume_24h)}
+                {abbreviateCurrency(tokenData.quote.USD.volume_24h)}
               </p>
             </div>
             <div className="bg-violet dark:bg-elixir rounded-lg p-4">
@@ -200,7 +201,7 @@ const TokenOverview = () => {
               <h2 className="font-semibold">Circulating Supply</h2>{' '}
               <p className="font-light">
                 {' '}
-                {tokenData.circulating_supply.toLocaleString()}{' '}
+                {abbreviateNumber(tokenData.circulating_supply)}{' '}
                 <span className="text-darknavhov font-semibold">
                   {tokenMetadata.symbol}
                 </span>{' '}
@@ -212,7 +213,7 @@ const TokenOverview = () => {
               <p className='font-light'>
                 {' '}
                 {tokenData.max_supply
-                  ? tokenData.max_supply.toLocaleString()
+                  ? abbreviateNumber(tokenData.max_supply)
                   : '∞'}{' '}
                 <span className="text-darknavhov font-semibold">
                   {tokenMetadata.symbol}

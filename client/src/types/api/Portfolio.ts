@@ -1,6 +1,3 @@
 export default interface PortfolioToken {
-  holdings: {
-    token: string;
-    quantity: number;
-  }[];
+  holdings: { token: { name: string; symbol: string }; quantity: number }[];
 }
