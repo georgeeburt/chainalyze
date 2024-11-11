@@ -168,14 +168,16 @@ const TokenOverview = () => {
         </div>
         <div className="flex">
           {/* Left part (purple sections) */}
-          <div className="grid grid-cols-2 gap-3 text-black  text-center text-lg flex-grow">
+          <div className="grid grid-cols-2 gap-3 text-black text-center text-xl flex-grow">
             <div className="bg-violet dark:bg-elixir rounded-lg p-4">
               <h2 className="font-semibold">Price</h2>
-              <p className='font-light'>{formatPrice(liveData?.price ?? tokenData.quote.USD.price)}</p>
+              <p className="font-light">
+                {formatPrice(liveData?.price ?? tokenData.quote.USD.price)}
+              </p>
             </div>
             <div className="bg-violet dark:bg-elixir rounded-lg p-4">
               <h2 className="font-semibold">Market Cap</h2>
-              <p className='font-light'>
+              <p className="font-light">
                 {liveData?.price && tokenData?.circulating_supply
                   ? formatMarketCap(
                       liveData.price * tokenData.circulating_supply
@@ -185,36 +187,36 @@ const TokenOverview = () => {
             </div>
             <div className="bg-violet dark:bg-elixir rounded-lg p-4">
               <h2 className="font-semibold">Volume (24hr)</h2>
-              <p className='font-light'>{formatMarketCap(tokenData.quote.USD.volume_24h)}</p>
+              <p className="font-light">
+                {formatMarketCap(tokenData.quote.USD.volume_24h)}
+              </p>
             </div>
             <div className="bg-violet dark:bg-elixir rounded-lg p-4">
               <h2 className="font-semibold">Volume Change % (24hr)</h2>
-              <p
-                className={
-                  tokenData.quote.USD.volume_change_24h < 0
-                    ? 'text-red font-semibold'
-                    : 'text-forest font-semibold'
-                }
-              >
-                {formatPriceChange(tokenData.quote.USD.volume_change_24h)}
-              </p>
+              <p className='font-light'>{formatPriceChange(tokenData.quote.USD.volume_change_24h)}</p>
             </div>
             <div className="bg-violet dark:bg-elixir rounded-lg p-4">
               {' '}
               <h2 className="font-semibold">Circulating Supply</h2>{' '}
-              <p className='font-light'>
+              <p className="font-light">
                 {' '}
                 {tokenData.circulating_supply.toLocaleString()}{' '}
-                <span className="text-darknavhov font-semibold">{tokenMetadata.symbol}</span>{' '}
+                <span className="text-darknavhov font-semibold">
+                  {tokenMetadata.symbol}
+                </span>{' '}
               </p>{' '}
             </div>{' '}
             <div className="bg-violet dark:bg-elixir rounded-lg p-4">
               {' '}
               <h2 className="font-semibold">Max. Supply</h2>{' '}
-              <p>
+              <p className='font-light'>
                 {' '}
-                {tokenData.max_supply ? tokenData.max_supply.toLocaleString() : '∞'}{' '}
-                <span className="text-darknavhov font-semibold">{tokenMetadata.symbol}</span>{' '}
+                {tokenData.max_supply
+                  ? tokenData.max_supply.toLocaleString()
+                  : '∞'}{' '}
+                <span className="text-darknavhov font-semibold">
+                  {tokenMetadata.symbol}
+                </span>{' '}
               </p>{' '}
             </div>
           </div>

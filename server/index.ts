@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import connectDB from './db';
 import router from './router';
 import cors from 'cors';
+import morgan from 'morgan';
 
 import dotenv from 'dotenv';
 
@@ -12,7 +13,7 @@ app.use(cors({
   origin: 'http://localhost:5173'
 }));
 app.use(express.json());
-
+app.use(morgan('dev'));
 app.use(router);
 app.use('/', async (req: Request<any>, res: Response<any>): Promise<any> => {
   return res.status(404).json({ error: 'Not found'});

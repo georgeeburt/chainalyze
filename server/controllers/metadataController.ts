@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 
-const getTokenMetadata = async (req: Request, res: Response) => {
+
+const getTokenMetadata = async (req: Request, res: Response): Promise<any> => {
   try {
     const tokenIds = req.query.id
     const metadataResponse = await fetch(`https://pro-api.coinmarketcap.com/v2/cryptocurrency/info?id=${tokenIds}`,
@@ -12,7 +13,7 @@ const getTokenMetadata = async (req: Request, res: Response) => {
       }
     )
     const metadata = await metadataResponse.json();
-    res.json(metadata);
+    return res.json(metadata);
   } catch (error) {
     console.error("Error fetching metadata:", error);
   }

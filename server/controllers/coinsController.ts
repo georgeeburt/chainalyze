@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
 
-export const getCoins = async (req: Request, res: Response) => {
+export const getCoins = async (req: Request, res: Response): Promise<any> => {
   try {
     const baseUrl = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/';
     let { symbol } = req.query;
@@ -32,6 +32,6 @@ export const getCoins = async (req: Request, res: Response) => {
 
   } catch (error) {
     console.error('Error fetching data from CoinMarketCap:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 };

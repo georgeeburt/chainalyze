@@ -87,33 +87,36 @@ const TokenList = () => {
   }
 
   return (
-    <table className="table-auto w-full text-left border-separate border-spacing-y-[2vh]">
-      <thead>
-        <tr className='text-xl '>
-          <th className="pl-4 w-1/12">#</th>
-          <th className="pl-4 w-3/12">Name</th>
-          <th className="w-2/12">Price</th>
-          <th className="w-3/12">Market Cap</th>
-          <th className="w-3/12">Price Change % (24h)</th>
-        </tr>
-      </thead>
-      <tbody>
-        {tokens.map((token, index) => {
-          const tokenMetadata = metadata[index];
-          const priceInfo =
-            prices[token.symbol + 'USDT'] || prices[token.symbol];
-          return (
-            <TokenListItem
-              key={token.id}
-              token={token}
-              metadata={tokenMetadata}
-              rank={index + 1}
-              priceData={priceInfo}
-            />
-          );
-        })}
-      </tbody>
-    </table>
+    <>
+      <hr className='border-silver dark:border-darklisthov' />
+      <table className="table-auto w-full text-left border-separate border-spacing-y-[2vh]">
+        <thead>
+          <tr className='text-xl '>
+            <th className="pl-4 w-1/12">#</th>
+            <th className="pl-5 w-3/12">Name</th>
+            <th className="w-2/12">Price</th>
+            <th className="w-3/12">Market Cap</th>
+            <th className="w-3/12">Price Change % (24h)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tokens.map((token, index) => {
+            const tokenMetadata = metadata[index];
+            const priceInfo =
+              prices[token.symbol + 'USDT'] || prices[token.symbol];
+            return (
+              <TokenListItem
+                key={token.id}
+                token={token}
+                metadata={tokenMetadata}
+                rank={index + 1}
+                priceData={priceInfo}
+              />
+            );
+          })}
+        </tbody>
+      </table>
+    </>
   );
 };
 
