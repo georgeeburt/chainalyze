@@ -46,7 +46,7 @@ const Navbar = () => {
               <Link to="/">Discover</Link>
             </li>
             <li className="hover:bg-sterling dark:hover:bg-darknavhov rounded-lg p-2">
-              Portfolio
+              <Link to="/portfolio">Portfolio</Link>
             </li>
           </ul>
           <ThemeButton isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />

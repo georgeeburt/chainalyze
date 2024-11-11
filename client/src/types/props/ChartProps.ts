@@ -4,4 +4,5 @@ import { ChartData } from "../sockets/ChartData";
 export default interface ChartProps {
   historicalData: AreaData[];
   socketData: ChartData[];
+  symbol: string;
 }

@@ -15,4 +15,5 @@ export default interface Token {
     };
   };
   circulating_supply: number;
+  max_supply: number
 }

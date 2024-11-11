@@ -33,7 +33,8 @@ export default {
         'red': '#FF3C3C',
         'gradient-start': 'rgba(255, 255, 255, 0.2)',
         'gradient-middle': 'rgba(255, 255, 255, 0.6)',
-        'gradient-end': 'rgba(255, 255, 255, 0.2)'
+        'gradient-end': 'rgba(255, 255, 255, 0.2)',
+        'violet': '#D9C6FF'
       },
       dropShadow: {
         'med': '0 7px 7px rgba(0, 0, 0, 0.10)',

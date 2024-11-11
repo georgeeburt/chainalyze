@@ -14,17 +14,28 @@ const TokenOverview = () => {
   const { id } = useParams();
   const [tokenMetadata, setTokenMetadata] = useState<Metadata | null>(null);
   const [tokenData, setTokenData] = useState<Token | null>(null);
-  const [historicalData, setHistoricalData] = useState<AreaData[]>([]);
+  const [historicalChartData, setHistoricalChartData] = useState<AreaData[]>(
+    []
+  );
   const [symbol, setSymbol] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
   const socketData = useChartSocket(symbol);
+  // Get the latest price data from the kline data
+  const latestData = socketData[socketData.length - 1]?.k;
+  const liveData = latestData
+    ? {
+        price: parseFloat(latestData.c),
+        marketCap:
+          parseFloat(latestData.c) * (tokenData?.circulating_supply || 0)
+      }
+    : null;
 
   const baseUrl = 'http://localhost:3001/api/';
 
   // Fetch appropriate token metadata
   useEffect(() => {
-    const fetchTokenData = async () => {
+    const fetchTokenMetadata = async () => {
       if (!id) return;
 
       const response = await fetch(`${baseUrl}metadata?id=${id}`);
@@ -35,7 +46,7 @@ const TokenOverview = () => {
       }
       setTokenMetadata(metadata);
     };
-    fetchTokenData();
+    fetchTokenMetadata();
   }, [id]);
 
   // Fetch token data only after `symbol` is set
@@ -54,6 +65,10 @@ const TokenOverview = () => {
       }
     };
     fetchTokenData();
+    // Poll for new data
+    const dataRefresh = setInterval(fetchTokenData, 60000);
+
+    return () => clearInterval(dataRefresh);
   }, [symbol]);
 
   // Fetch historical chart data only after `symbol` is set
@@ -69,7 +84,7 @@ const TokenOverview = () => {
           time: Math.floor(item[0] / 1000) as Time,
           value: parseFloat(item[4])
         }));
-        setHistoricalData(chartData);
+        setHistoricalChartData(chartData);
       } catch (error) {
         console.error('Error fetching historical chart data:', error);
       } finally {
@@ -88,50 +103,132 @@ const TokenOverview = () => {
   }
 
   return (
-    <div className="flex flex-col gap-4 text-3xl font-normal px-[15%] py-[2%] h-full">
-      <div className="flex flex-col gap-10 bg-lightnav dark:bg-darklabel rounded-md py-[2%] px-[2%]">
-        <div className="flex justify-start items-center gap-3">
-          <img
-            src={tokenMetadata.logo}
-            alt={`${tokenMetadata.name} logo`}
-            className="w-12"
-          />
-          <h1 className="font-semibold">
-            {tokenMetadata?.name}{' '}
-            <span className="font-thin text-gunmetal dark:text-stone">
-              {tokenMetadata.symbol}
-            </span>
-          </h1>
+    <div className="flex flex-col gap-2 text-3xl font-normal px-[15%] py-[0.5%] h-full">
+      <div className="flex flex-col gap-4 bg-lightnav dark:bg-darklabel rounded-md py-[1%] px-[2%]">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <img
+              src={tokenMetadata.logo}
+              alt={`${tokenMetadata.name} logo`}
+              className="w-12"
+            />
+            <h1 className="font-semibold">
+              {tokenMetadata?.name}{' '}
+              <span className="font-thin text-gunmetal dark:text-stone">
+                {tokenMetadata.symbol}
+              </span>
+            </h1>
+          </div>
+          <div className="flex gap-4 text-black dark:text-white">
+            <button
+              onClick={() =>
+                window.open(tokenMetadata.urls.website[0], '_blank')
+              }
+              className="flex items-center gap-2 text-[1.5rem] text-black dark:text-white bg-lightlisthov dark:bg-darkbtnhov rounded-lg hover:bg-violet hover:dark:bg-elixir p-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418"
+                />
+              </svg>
+              Website
+            </button>
+            <button
+              onClick={() =>
+                window.open(tokenMetadata.urls.technical_doc[0], '_blank')
+              }
+              className="flex items-center gap-2 text-[1.5rem] text-black dark:text-white bg-lightlisthov dark:bg-darkbtnhov rounded-lg hover:bg-violet hover:dark:bg-elixir p-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z"
+                />
+              </svg>
+              Whitepaper
+            </button>
+          </div>
         </div>
-        <div className="flex flex-wrap text-center gap-6 text-black text-lg">
-          <div className="bg-elixir rounded-lg p-4">
-            <h2 className="font-semibold">Price</h2>
-            <p>{formatPrice(tokenData.quote.USD.price)}</p>
+        <div className="flex">
+          {/* Left part (purple sections) */}
+          <div className="grid grid-cols-2 gap-3 text-black  text-center text-lg flex-grow">
+            <div className="bg-violet dark:bg-elixir rounded-lg p-4">
+              <h2 className="font-semibold">Price</h2>
+              <p className='font-light'>{formatPrice(liveData?.price ?? tokenData.quote.USD.price)}</p>
+            </div>
+            <div className="bg-violet dark:bg-elixir rounded-lg p-4">
+              <h2 className="font-semibold">Market Cap</h2>
+              <p className='font-light'>
+                {liveData?.price && tokenData?.circulating_supply
+                  ? formatMarketCap(
+                      liveData.price * tokenData.circulating_supply
+                    )
+                  : 'Loading...'}
+              </p>
+            </div>
+            <div className="bg-violet dark:bg-elixir rounded-lg p-4">
+              <h2 className="font-semibold">Volume (24hr)</h2>
+              <p className='font-light'>{formatMarketCap(tokenData.quote.USD.volume_24h)}</p>
+            </div>
+            <div className="bg-violet dark:bg-elixir rounded-lg p-4">
+              <h2 className="font-semibold">Volume Change % (24hr)</h2>
+              <p
+                className={
+                  tokenData.quote.USD.volume_change_24h < 0
+                    ? 'text-red font-semibold'
+                    : 'text-forest font-semibold'
+                }
+              >
+                {formatPriceChange(tokenData.quote.USD.volume_change_24h)}
+              </p>
+            </div>
+            <div className="bg-violet dark:bg-elixir rounded-lg p-4">
+              {' '}
+              <h2 className="font-semibold">Circulating Supply</h2>{' '}
+              <p className='font-light'>
+                {' '}
+                {tokenData.circulating_supply.toLocaleString()}{' '}
+                <span className="text-darknavhov font-semibold">{tokenMetadata.symbol}</span>{' '}
+              </p>{' '}
+            </div>{' '}
+            <div className="bg-violet dark:bg-elixir rounded-lg p-4">
+              {' '}
+              <h2 className="font-semibold">Max. Supply</h2>{' '}
+              <p>
+                {' '}
+                {tokenData.max_supply ? tokenData.max_supply.toLocaleString() : '∞'}{' '}
+                <span className="text-darknavhov font-semibold">{tokenMetadata.symbol}</span>{' '}
+              </p>{' '}
+            </div>
           </div>
-          <div className="bg-elixir rounded-lg p-4">
-            <h2 className="font-semibold">Volume (24hr)</h2>
-            <p>{formatMarketCap(tokenData.quote.USD.volume_24h)}</p>
-          </div>
-          <div className="bg-elixir rounded-lg p-4">
-            <h2 className="font-semibold">Market Cap</h2>
-            <p>{formatMarketCap(tokenData.quote.USD.market_cap)}</p>
-          </div>
-          <div className="bg-elixir rounded-lg p-4">
-            <h2 className="font-semibold">Circulating Supply</h2>
-            <p>
-              {tokenData.circulating_supply.toLocaleString()}{' '}
-              <span className="text-darklabel">{tokenMetadata.symbol}</span>
-            </p>
-          </div>
-          <div className="flex flex-col flex-end flex-grow bg-lightlisthov dark:bg-darkbtnhov text-start text-black dark:text-stone rounded-lg p-4">
+
+          {/* Price Change % section on the right */}
+          <div className="flex flex-col gap- w-[25%] bg-lightlisthov dark:bg-darkbtnhov text-start text-[1.6rem] text-black dark:text-stone rounded-lg p-4 ml-10">
             <h2 className="font-semibold dark:text-white">Price Change %</h2>
             <p>
               1h:{' '}
               <span
                 className={
                   tokenData.quote.USD.percent_change_1h < 0
-                    ? 'text-red'
-                    : 'text-forest'
+                    ? 'text-red font-light'
+                    : 'text-forest font-light'
                 }
               >
                 {formatPriceChange(tokenData.quote.USD.percent_change_1h)}
@@ -142,8 +239,8 @@ const TokenOverview = () => {
               <span
                 className={
                   tokenData.quote.USD.percent_change_24h < 0
-                    ? 'text-red'
-                    : 'text-forest'
+                    ? 'text-red font-light'
+                    : 'text-forest font-light'
                 }
               >
                 {formatPriceChange(tokenData.quote.USD.percent_change_24h)}
@@ -154,8 +251,8 @@ const TokenOverview = () => {
               <span
                 className={
                   tokenData.quote.USD.percent_change_7d < 0
-                    ? 'text-red'
-                    : 'text-forest'
+                    ? 'text-red font-light'
+                    : 'text-forest font-light'
                 }
               >
                 {formatPriceChange(tokenData.quote.USD.percent_change_7d)}
@@ -166,8 +263,8 @@ const TokenOverview = () => {
               <span
                 className={
                   tokenData.quote.USD.percent_change_30d < 0
-                    ? 'text-red'
-                    : 'text-forest'
+                    ? 'text-red font-light'
+                    : 'text-forest font-light'
                 }
               >
                 {formatPriceChange(tokenData.quote.USD.percent_change_30d)}
@@ -176,7 +273,11 @@ const TokenOverview = () => {
           </div>
         </div>
       </div>
-      <Chart historicalData={historicalData} socketData={socketData} />
+      <Chart
+        historicalData={historicalChartData}
+        socketData={socketData}
+        symbol={tokenMetadata.symbol}
+      />
     </div>
   );
 };

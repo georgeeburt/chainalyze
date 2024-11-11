@@ -3,6 +3,7 @@ import Discover from './components/Discover/Discover';
 import Navbar from './components/Navbar/Navbar';
 import TokenOverview from './components/TokenOverview/TokenOverview';
 import './App.css';
+import Portfolio from './components/Portfolio';
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Discover />} />
           <Route path="/token/:id" element={<TokenOverview />} />
+          <Route path="/portfolio" element={<Portfolio />} />
         </Routes>
       </div>
     </Router>
