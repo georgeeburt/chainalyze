@@ -1,5 +1,5 @@
 import Token from "../api/Token";
-import Metadata from "../api/Metadata";
+import { Metadata } from "../api/Metadata";
 import { PriceData } from "../sockets/PriceData";
 
 export default interface TokenListItemProps {

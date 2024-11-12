@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Token from '../../types/api/Token';
-import Metadata from '../../types/api/Metadata';
+import { Metadata } from '../../types/api/Metadata';
 import TokenListItem from './TokenListItem';
 import { PriceData } from '../../types/sockets/PriceData';
 import useDiscoverSocket from '../../hooks/useDiscoverSocket';
@@ -11,7 +11,6 @@ const TokenList = () => {
   const [loading, setLoading] = useState(true);
   const [prices, setPrices] = useState<Record<string, PriceData>>({});
 
-  // Use custom hook to get live price data
   const livePriceData = useDiscoverSocket(tokens);
 
   useEffect(() => {
@@ -24,26 +23,29 @@ const TokenList = () => {
         const tokenData = await response.json();
         setTokens(tokenData.data);
 
-        // Fetch token metadata
-        const tokenIds = tokenData.data
-          .map((token: Token) => token.id)
-          .join(',');
-        const metadataResponse = await fetch(
-          `${baseUrl}metadata?id=${tokenIds}`
-        );
+        // Fetch metadata for tokens
+        const tokenIds = tokenData.data.map((token: Token) => token.id).join(',');
+        const metadataResponse = await fetch(`${baseUrl}metadata?id=${tokenIds}`);
         const metadataData = await metadataResponse.json();
-        setMetadata(
-          tokenData.data.map(
-            (token: Token) => metadataData.data[token.id] || null
-          )
-        );
 
+        // Map the metadata correctly to the Metadata interface structure
+        const mappedMetadata = tokenData.data.map((token: Token) => {
+          return {
+            id: token.id,
+            logo: metadataData.data[token.id]?.logo || '',
+            name: metadataData.data[token.id]?.name || '',
+            symbol: token.symbol,
+            urls: metadataData.data[token.id]?.urls || { website: [], technical_doc: [] },
+          };
+        });
+
+        setMetadata(mappedMetadata);
         const priceData = tokenData.data.reduce(
           (acc: Record<string, PriceData>, token: Token) => {
             acc[token.symbol] = {
               price: token.quote.USD.price,
               marketCap: token.quote.USD.market_cap,
-              priceChange: token.quote.USD.percent_change_24h
+              priceChange: token.quote.USD.percent_change_24h,
             };
             return acc;
           },
@@ -59,6 +61,7 @@ const TokenList = () => {
     fetchInitialData();
   }, []);
 
+  // Handle live webhook data
   useEffect(() => {
     setPrices(prevPrices => {
       const updatedPrices = { ...prevPrices };
@@ -70,7 +73,7 @@ const TokenList = () => {
             livePriceData[symbol].marketCap ?? updatedPrices[symbol].marketCap,
           priceChange:
             livePriceData[symbol].priceChange ??
-            updatedPrices[symbol].priceChange
+            updatedPrices[symbol].priceChange,
         };
       });
 
@@ -87,36 +90,33 @@ const TokenList = () => {
   }
 
   return (
-    <>
-      <hr className='border-silver dark:border-darklisthov' />
-      <table className="table-auto w-full text-left border-separate border-spacing-y-[2vh]">
-        <thead>
-          <tr className='text-xl '>
-            <th className="pl-4 w-1/12">#</th>
-            <th className="pl-5 w-3/12">Name</th>
-            <th className="w-2/12">Price</th>
-            <th className="w-3/12">Market Cap</th>
-            <th className="w-3/12">Price Change % (24h)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tokens.map((token, index) => {
-            const tokenMetadata = metadata[index];
-            const priceInfo =
-              prices[token.symbol + 'USDT'] || prices[token.symbol];
-            return (
-              <TokenListItem
-                key={token.id}
-                token={token}
-                metadata={tokenMetadata}
-                rank={index + 1}
-                priceData={priceInfo}
-              />
-            );
-          })}
-        </tbody>
-      </table>
-    </>
+    <table className="table-auto w-full text-left border-separate border-spacing-y-[2vh]">
+      <thead>
+        <tr className="text-xl">
+          <th className="pl-4 w-1/12">#</th>
+          <th className="pl-5 w-3/12">Name</th>
+          <th className="w-2/12">Price</th>
+          <th className="w-3/12">Market Cap</th>
+          <th className="w-3/12">Price Change % (24h)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {tokens.map((token, index) => {
+          const tokenMetadata = metadata[index];
+          const priceInfo = prices[token.symbol + 'USDT'] || prices[token.symbol];
+
+          return (
+            <TokenListItem
+              key={token.id}
+              token={token}
+              metadata={tokenMetadata}
+              rank={index + 1}
+              priceData={priceInfo}
+            />
+          );
+        })}
+      </tbody>
+    </table>
   );
 };
 

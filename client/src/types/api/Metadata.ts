@@ -1,4 +1,4 @@
-export default interface Metadata {
+export interface Metadata {
   id: number,
   logo: string,
   name: string,

@@ -20,12 +20,12 @@ const Portfolio = () => {
   const baseUrl = 'http://localhost:3001';
 
   // Selected token input handler
-  const handleTokenChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleTokenInputChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedToken(event.target.value);
   };
 
   // Quantity change handler
-  const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQuantityInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuantity(event.target.value);
   };
 
@@ -133,6 +133,7 @@ const Portfolio = () => {
   }, []);
 
   // Hooks
+  // Fetch list of trending tokens
   useEffect(() => {
     const fetchTokens = async () => {
       try {
@@ -148,6 +149,7 @@ const Portfolio = () => {
     fetchTokens();
   }, []);
 
+  // Handle message popup
   useEffect(() => {
     if (message !== null) {
       setIsMessageVisible(true);
@@ -165,7 +167,7 @@ const Portfolio = () => {
     }
   }, [message]);
 
-  // Loading state
+  // Spinner
   if (loading || !tokenList) {
     return (
       <div className="flex justify-center items-center h-screen transform -translate-y-6">
@@ -174,7 +176,6 @@ const Portfolio = () => {
     );
   }
 
-  // Render
   return (
     <>
       {message && (
@@ -202,7 +203,7 @@ const Portfolio = () => {
             <select
               className="bg-lightlisthov text-black focus:border-elixir focus:border-2 hover:ring-1 hover:ring-elixir focus:outline-none rounded-md p-2"
               value={selectedToken}
-              onChange={handleTokenChange}
+              onChange={handleTokenInputChange}
             >
               <option value="none">Select token</option>
               {tokenList
@@ -222,7 +223,7 @@ const Portfolio = () => {
               placeholder="Enter quantity"
               min="1"
               value={quantity}
-              onChange={handleQuantityChange}
+              onChange={handleQuantityInputChange}
             />
 
             {/* Add Token Button */}
@@ -240,12 +241,11 @@ const Portfolio = () => {
             userPortfolio.map((holding, index) => (
               <div className="flex gap-4" key={index}>
                 <p>
-                  {/* Render token name and symbol separately */}
                   {holding?.token?.name} ({holding?.token?.symbol}) - Quantity:{' '}
                   {holding.quantity}
                 </p>
                 <svg
-                  onClick={() => handleDeleteToken(holding.token.name)} // Use token symbol to delete
+                  onClick={() => handleDeleteToken(holding.token.name)}
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"

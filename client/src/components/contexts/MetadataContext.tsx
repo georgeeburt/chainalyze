@@ -1,35 +1,42 @@
-import React, { createContext, useState } from 'react';
+import { createContext, useState } from 'react';
+import { Metadata } from '../../types/api/Metadata';
 import MetadataContextType from '../../types/contexts/metadataContextType';
-import MetadataProviderProps from '../../types/contexts/props/MetadataProviderProps';
 
 export const MetadataContext = createContext<MetadataContextType | undefined>(undefined);
 
-export const MetadataProvider: React.FC<MetadataProviderProps> = ({ children }) => {
+export const MetadataProvider = ({ children }: { children: React.ReactNode }) => {
+  // Initialize with the correct type
   const [metadata, setMetadata] = useState<{ [symbol: string]: string }>({});
 
-  const fetchMetadata = async (symbols: string | string[]) => {
+  const getMetadata = async (id: string): Promise<Metadata | null> => {
     try {
-      const symbolsArray = Array.isArray(symbols) ? symbols : [symbols];
-      const response = await fetch(`your-metadata-endpoint?symbols=${symbolsArray.join(',')}`);
-      const data = await response.json();
+      const response = await fetch(`http://localhost:3001/api/metadata?id=${id}`);
+      const responseData = await response.json();
+      const newMetadata = responseData?.data?.[id] || null;
 
-      setMetadata((prevMetadata) => {
-        const newMetadata = symbolsArray.reduce((acc, symbol) => {
-          if (data[symbol]) {
-            acc[symbol] = data[symbol];
-          }
-          return acc;
-        }, {} as { [symbol: string]: string });
+      if (newMetadata) {
+        // Update metadata state with just the string value needed
+        setMetadata(prev => ({
+          ...prev,
+          [id]: newMetadata.symbol || ''
+        }));
+      }
 
-        return { ...prevMetadata, ...newMetadata };
-      });
+      return newMetadata;
     } catch (error) {
       console.error('Error fetching metadata:', error);
+      return null;
     }
   };
 
   return (
-    <MetadataContext.Provider value={{ metadata, setMetadata, fetchMetadata }}>
+    <MetadataContext.Provider
+      value={{
+        metadata,
+        setMetadata,
+        getMetadata
+      }}
+    >
       {children}
     </MetadataContext.Provider>
   );

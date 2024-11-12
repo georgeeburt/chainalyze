@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import { AreaData, Time } from 'lightweight-charts';
 import Chart from './Chart';
 import useChartSocket from '../../hooks/useChartSocket';
-import Metadata from '../../types/api/Metadata';
+import useMetadata from '../../hooks/useMetadata';
+import { Metadata } from '../../types/api/Metadata';
 import { KlineData } from '../../types/api/KlineData';
 import Token from '../../types/api/Token';
 import { formatPriceChange } from '../../utils/formatters/formatPriceChange';
@@ -13,16 +14,14 @@ import { abbreviateNumber } from '../../utils/numberAbbreviators/abbreviateNumbe
 
 const TokenOverview = () => {
   const { id } = useParams();
+  const { getMetadata } = useMetadata();
   const [tokenMetadata, setTokenMetadata] = useState<Metadata | null>(null);
   const [tokenData, setTokenData] = useState<Token | null>(null);
-  const [historicalChartData, setHistoricalChartData] = useState<AreaData[]>(
-    []
-  );
+  const [historicalChartData, setHistoricalChartData] = useState<AreaData[]>([]);
   const [symbol, setSymbol] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
   const socketData = useChartSocket(symbol);
-  // Get the latest price data from the kline data
   const latestData = socketData[socketData.length - 1]?.k;
   const liveData = latestData
     ? {
@@ -34,23 +33,30 @@ const TokenOverview = () => {
 
   const baseUrl = 'http://localhost:3001/api/';
 
-  // Fetch appropriate token metadata
+  // Fixed metadata loading with proper Promise handling
   useEffect(() => {
-    const fetchTokenMetadata = async () => {
+    const loadMetadata = async () => {
       if (!id) return;
 
-      const response = await fetch(`${baseUrl}metadata?id=${id}`);
-      const responseData = await response.json();
-      const metadata = responseData?.data?.[id];
-      if (metadata?.symbol) {
-        setSymbol(metadata?.symbol.toLowerCase());
+      try {
+        const metadata = await getMetadata(id);
+        // Only update state if metadata is valid
+        if (metadata) {
+          setTokenMetadata(metadata);
+          if (metadata.symbol) {
+            setSymbol(metadata.symbol.toLowerCase());
+          }
+        }
+      } catch (error) {
+        console.error('Error loading metadata:', error);
+        setTokenMetadata(null); // Reset on error
       }
-      setTokenMetadata(metadata);
     };
-    fetchTokenMetadata();
-  }, [id]);
 
-  // Fetch token data only after `symbol` is set
+    loadMetadata();
+  }, [id, getMetadata]);
+
+  // Rest of the component remains the same...
   useEffect(() => {
     if (!symbol) return;
     const fetchTokenData = async () => {
@@ -66,13 +72,11 @@ const TokenOverview = () => {
       }
     };
     fetchTokenData();
-    // Poll for new data
     const dataRefresh = setInterval(fetchTokenData, 60000);
 
     return () => clearInterval(dataRefresh);
   }, [symbol]);
 
-  // Fetch historical chart data only after `symbol` is set
   useEffect(() => {
     if (!symbol) return;
     const fetchHistoricalData = async () => {
