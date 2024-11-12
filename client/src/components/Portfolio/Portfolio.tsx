@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import useMetadata from '../hooks/useMetadata';
-import useDiscoverSocket from '../hooks/useDiscoverSocket';
-import Token from '../types/api/Token';
-import PortfolioToken from '../types/api/Portfolio';
-import { PriceData } from '../types/sockets/PriceData';
-import { Metadata } from '../types/api/Metadata';
+import DonutPortfolioChart from './DonutPortfolioChart';
+import useMetadata from '../../hooks/useMetadata';
+import useDiscoverSocket from '../../hooks/useDiscoverSocket';
+import Token from '../../types/api/Token';
+import PortfolioToken from '../../types/api/Portfolio';
+import { PriceData } from '../../types/sockets/PriceData';
+import { Metadata } from '../../types/api/Metadata';
 
 interface TokenMetadata {
   [key: string]: Metadata;
@@ -341,7 +342,9 @@ const Portfolio = () => {
                 prices[holding.token.symbol];
 
               // Calculate total value of holding
-              const totalValue = priceInfo?.price ? holding.quantity * priceInfo.price : 0;
+              const totalValue = priceInfo?.price
+                ? holding.quantity * priceInfo.price
+                : 0;
 
               return (
                 <div className="flex items-center gap-4" key={index}>
@@ -396,6 +399,17 @@ const Portfolio = () => {
               );
             })
           )}
+          <div>
+            <h2 className="text-4xl">Portfolio Distribution</h2>
+            <DonutPortfolioChart
+          userPortfolio={userPortfolio}
+          tokens={tokenList.reduce((acc, token) => {
+            acc[token.symbol] = token;
+            return acc;
+          }, {} as Record<string, Token>)}
+          prices={prices}
+        />
+          </div>
         </div>
       </div>
     </>

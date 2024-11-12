@@ -4,7 +4,7 @@ import Discover from './components/Discover/Discover';
 import Navbar from './components/Navbar/Navbar';
 import TokenOverview from './components/TokenOverview/TokenOverview';
 import './App.css';
-import Portfolio from './components/Portfolio';
+import Portfolio from './components/Portfolio/Portfolio';
 
 const App = () => {
   return (
