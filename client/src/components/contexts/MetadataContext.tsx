@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useState, useCallback } from 'react';
 import { Metadata } from '../../types/api/Metadata';
 import MetadataContextType from '../../types/contexts/metadataContextType';
 
@@ -23,7 +23,7 @@ export const MetadataContext = createContext<MetadataContextType | undefined>(un
 export const MetadataProvider = ({ children }: { children: React.ReactNode }) => {
   const [metadata, setMetadata] = useState<{ [symbol: string]: string }>({});
 
-  const getMetadata = async (id: string): Promise<Metadata | null> => {
+  const getMetadata = useCallback(async (id: string): Promise<Metadata | null> => {
     try {
       const response = await fetch(`http://localhost:3001/api/metadata?id=${id}`);
       const responseData: MetadataResponse = await response.json();
@@ -50,9 +50,9 @@ export const MetadataProvider = ({ children }: { children: React.ReactNode }) =>
       console.error('Error fetching metadata:', error);
       return null;
     }
-  };
+  }, []);
 
-  const getBatchMetadata = async (ids: string): Promise<{ [key: string]: Metadata }> => {
+  const getBatchMetadata = useCallback(async (ids: string): Promise<{ [key: string]: Metadata }> => {
     try {
       const response = await fetch(`http://localhost:3001/api/metadata?id=${ids}`);
       const responseData: MetadataResponse = await response.json();
@@ -80,17 +80,17 @@ export const MetadataProvider = ({ children }: { children: React.ReactNode }) =>
       console.error('Error fetching batch metadata:', error);
       return {};
     }
+  }, []);
+
+  const value = {
+    metadata,
+    setMetadata,
+    getMetadata,
+    getBatchMetadata
   };
 
   return (
-    <MetadataContext.Provider
-      value={{
-        metadata,
-        setMetadata,
-        getMetadata,
-        getBatchMetadata
-      }}
-    >
+    <MetadataContext.Provider value={value}>
       {children}
     </MetadataContext.Provider>
   );

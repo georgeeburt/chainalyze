@@ -1,19 +1,48 @@
 import { useEffect, useState } from 'react';
-import Token from '../types/api/Token';
 import { PriceData } from '../types/sockets/PriceData';
+import Token from '../types/api/Token';
 
-const useDiscoverSocket = (tokens: Token[]) => {
+interface Holding {
+  token: {
+    symbol: string;
+  };
+  quantity: number;
+}
+
+type SocketInput = Token[] | Holding[];
+
+const useDiscoverSocket = (input: SocketInput) => {
   const [priceData, setPriceData] = useState<Record<string, PriceData>>({});
-  useEffect(() => {
-    if (tokens.length === 0) return;
 
-    const streamUrl = `wss://stream.binance.com:9443/ws/${tokens
-      .map(token => `${token.symbol.toLowerCase()}usdt@ticker`)
+  useEffect(() => {
+    if (input.length === 0) return;
+
+    // Handle both Token[] and Holding[] cases
+    const streamUrl = `wss://stream.binance.com:9443/ws/${input
+      .map(item => {
+        const symbol = 'symbol' in item ? item.symbol : item.token.symbol;
+        return `${symbol.toLowerCase()}usdt@ticker`;
+      })
       .join('/')}`;
+
     const socket = new WebSocket(streamUrl);
 
     socket.onopen = () => {
       console.log('WebSocket connection opened');
+
+      // Initialize price data with current token data
+      const initialPrices: Record<string, PriceData> = {};
+      input.forEach(item => {
+        const symbol = 'symbol' in item ? item.symbol : item.token.symbol;
+        if ('quote' in item) {
+          initialPrices[symbol + 'USDT'] = {
+            price: item.quote.USD.price,
+            marketCap: item.quote.USD.market_cap,
+            priceChange: item.quote.USD.percent_change_24h,
+          };
+        }
+      });
+      setPriceData(initialPrices);
     };
 
     socket.onmessage = event => {
@@ -25,17 +54,22 @@ const useDiscoverSocket = (tokens: Token[]) => {
       }
 
       if (data.e === '24hrTicker') {
-        // Find the circulating supply for the token
-        const token = tokens.find(token => token.symbol + 'USDT' === data.s);
-        if (token) {
-          const price = parseFloat(data.c);
-          const marketCap = price * token.circulating_supply;
+        const item = input.find(i => {
+          const symbol = 'symbol' in i ? i.symbol : i.token.symbol;
+          return (symbol + 'USDT') === data.s;
+        });
+
+        if (item) {
           setPriceData(prevData => ({
             ...prevData,
             [data.s]: {
-              price: price,
-              marketCap: marketCap,
-              priceChange: data.P
+              price: parseFloat(data.c),
+              marketCap: parseFloat(data.c) * (
+                'circulating_supply' in item
+                  ? item.circulating_supply
+                  : item.quantity
+              ),
+              priceChange: parseFloat(data.P)
             }
           }));
         }
@@ -53,7 +87,7 @@ const useDiscoverSocket = (tokens: Token[]) => {
     return () => {
       socket.close();
     };
-  }, [tokens]);
+  }, [input]);
 
   return priceData;
 };
