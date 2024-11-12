@@ -55,7 +55,11 @@ const Chart = ({ historicalData, socketData }: ChartProps) => {
     setChartTheme(isDarkMode);
 
     if (historicalData.length > 0) {
-      series.setData(historicalData);
+      const formattedHistoricalData = historicalData.map(item => ({
+        time: Number(item.time) as Time,
+        value: item.value
+      }));
+      series.setData(formattedHistoricalData);
     }
 
     // Resize chart on window resize
@@ -92,11 +96,18 @@ const Chart = ({ historicalData, socketData }: ChartProps) => {
     if (!seriesRef.current || !socketData.length) return;
 
     const latestData = socketData[socketData.length - 1];
+    if (!latestData?.k) return;
+
     const chartData: AreaData = {
-      time: Math.floor(latestData.k.t / 1000) as Time,
-      value: parseFloat(latestData.k.c),
+      time: Math.floor(Number(latestData.k.t) / 1000) as Time,
+      value: parseFloat(latestData.k.c)
     };
-    seriesRef.current.update(chartData);
+
+    try {
+      seriesRef.current.update(chartData);
+    } catch (error) {
+      console.error('Error updating chart:', error);
+    }
   }, [socketData]);
 
   return <div ref={chartContainerRef} className="chart-container" />;

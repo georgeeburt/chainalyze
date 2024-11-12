@@ -33,14 +33,12 @@ const TokenOverview = () => {
 
   const baseUrl = 'http://localhost:3001/api/';
 
-  // Fixed metadata loading with proper Promise handling
   useEffect(() => {
     const loadMetadata = async () => {
       if (!id) return;
 
       try {
         const metadata = await getMetadata(id);
-        // Only update state if metadata is valid
         if (metadata) {
           setTokenMetadata(metadata);
           if (metadata.symbol) {
@@ -49,14 +47,13 @@ const TokenOverview = () => {
         }
       } catch (error) {
         console.error('Error loading metadata:', error);
-        setTokenMetadata(null); // Reset on error
+        setTokenMetadata(null);
       }
     };
 
     loadMetadata();
   }, [id, getMetadata]);
 
-  // Rest of the component remains the same...
   useEffect(() => {
     if (!symbol) return;
     const fetchTokenData = async () => {

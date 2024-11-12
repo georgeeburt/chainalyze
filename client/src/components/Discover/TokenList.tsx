@@ -4,6 +4,7 @@ import { Metadata } from '../../types/api/Metadata';
 import TokenListItem from './TokenListItem';
 import { PriceData } from '../../types/sockets/PriceData';
 import useDiscoverSocket from '../../hooks/useDiscoverSocket';
+import useMetadata from '../../hooks/useMetadata';
 
 const TokenList = () => {
   const [tokens, setTokens] = useState<Token[]>([]);
@@ -11,31 +12,40 @@ const TokenList = () => {
   const [loading, setLoading] = useState(true);
   const [prices, setPrices] = useState<Record<string, PriceData>>({});
 
-  const livePriceData = useDiscoverSocket(tokens);
+  const { getBatchMetadata } = useMetadata(); //Metadata Context
+  const livePriceData = useDiscoverSocket(tokens); // Live Price data websocket hook
 
+  // Fetch tokens
   useEffect(() => {
+    let mounted = true;
+
     const fetchInitialData = async () => {
       const baseUrl = 'http://localhost:3001/api/';
       try {
-        // Fetch tokens
         const response = await fetch(`${baseUrl}tokens`);
         if (!response.ok) throw new Error('Failed to fetch tokens');
         const tokenData = await response.json();
+        if (!mounted) return;
         setTokens(tokenData.data);
 
-        // Fetch metadata for tokens
-        const tokenIds = tokenData.data.map((token: Token) => token.id).join(',');
-        const metadataResponse = await fetch(`${baseUrl}metadata?id=${tokenIds}`);
-        const metadataData = await metadataResponse.json();
+        // Create comma-separated list of token IDs
+        const tokenIds = tokenData.data
+          .map((token: Token) => token.id.toString())
+          .join(',');
 
-        // Map the metadata correctly to the Metadata interface structure
+        // Fetch metadata using context
+        const metadataData = await getBatchMetadata(tokenIds);
+        if (!mounted) return;
+
+        // Map the metadata correctly to each token
         const mappedMetadata = tokenData.data.map((token: Token) => {
+          const tokenMetadata = metadataData[token.id.toString()];
           return {
             id: token.id,
-            logo: metadataData.data[token.id]?.logo || '',
-            name: metadataData.data[token.id]?.name || '',
+            logo: tokenMetadata?.logo || '',
+            name: tokenMetadata?.name || '',
             symbol: token.symbol,
-            urls: metadataData.data[token.id]?.urls || { website: [], technical_doc: [] },
+            urls: tokenMetadata?.urls || { website: [], technical_doc: [] },
           };
         });
 
@@ -55,10 +65,17 @@ const TokenList = () => {
         setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
-        setLoading(false);
+        if (mounted) {
+          setLoading(false);
+        }
       }
     };
+
     fetchInitialData();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   // Handle live webhook data
