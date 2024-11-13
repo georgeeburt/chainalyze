@@ -1,5 +1,6 @@
 // Function to format price change percentage with a plus sign for positive changes
-export const formatPriceChange = (value: number) => {
+export const formatPriceChange = (value: number | string) => {
+  value = Number(value);
   const formattedValue = new Intl.NumberFormat('en-US', {
     style: 'percent',
     minimumFractionDigits: 2,

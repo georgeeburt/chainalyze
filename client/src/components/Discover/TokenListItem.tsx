@@ -11,11 +11,11 @@ const TokenListItem = ({
   priceData
 }: TokenListItemProps) => {
   return (
-    <tr key={token.id} className="border-b bg-slate dark:bg-darklabel hover:bg-lightlisthov dark:hover:bg-darklisthov">
+    <tr key={token.id} className="bg-slate dark:bg-darklabel hover:bg-lightlisthov dark:hover:bg-darklisthov">
       <td className="font-light text-gunmetal dark:text-stone rounded-l-lg p-4">
         {rank}
       </td>
-      <td className="flex gap-3 p-6">
+      <td className="flex tex-lg gap-3 p-6">
         <img
           src={metadata?.logo}
           alt={`${token.name} logo`}

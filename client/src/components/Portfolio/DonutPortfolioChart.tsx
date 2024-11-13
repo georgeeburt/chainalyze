@@ -1,70 +1,42 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useMemo } from 'react';
 import { PieChart, Pie, Tooltip, Legend, Cell, ResponsiveContainer } from 'recharts';
 import DonutPortfolioChartProps from '../../types/props/DonutChartPortfolioProps';
-import PortfolioToken from '../../types/api/Portfolio';
 
-// Function to generate a unique color for each token
+// Updated color function with purple and pink shades
+const COLORS = ['#8C52FF', '#B14BFF', '#D452FF', '#FF52E9', '#FF52B1', '#A364FF'];
+
 const getColor = (index: number) => {
-  const hue = (index * 15) % 360; // Golden angle increment
-  return `hsl(${hue}, 100%, 80%)`;
-}
+  return COLORS[index % COLORS.length];
+};
 
 const DonutPortfolioChart: React.FC<DonutPortfolioChartProps> = ({ userPortfolio, tokens, prices }) => {
-  const [chartData, setChartData] = useState<
-    { name: string; value: number; key: string }[]
-  >([]);
-  const prevUserPortfolioRef = useRef<PortfolioToken['holdings']>([]);
-
-  useEffect(() => {
-    // Calculate the total portfolio value
+  const chartData = useMemo(() => {
     const totalPortfolioValue = userPortfolio.reduce((total, holding) => {
       const token = tokens[holding.token.symbol];
       const price = prices[token?.symbol + 'USDT']?.price || prices[token?.symbol]?.price || 0;
       return total + (holding.quantity * price);
     }, 0);
 
-    // Map the data to chart-friendly format with percentages
-    const newChartData = userPortfolio.map((holding, index) => {
-      const token = tokens[holding.token.symbol];
-      const price = prices[token?.symbol + 'USDT']?.price || prices[token?.symbol]?.price || 0;
-      const value = (holding.quantity * price) / totalPortfolioValue * 100;
-      return {
-        name: token?.symbol || '',
-        value,
-        key: `${token?.symbol || ''}-${index}`,
-      };
-    });
+    if (totalPortfolioValue === 0) return [];
 
-    setChartData(newChartData);
+    return userPortfolio
+      .map((holding, index) => {
+        const token = tokens[holding.token.symbol];
+        const price = prices[token?.symbol + 'USDT']?.price || prices[token?.symbol]?.price || 0;
+        const value = (holding.quantity * price) / totalPortfolioValue * 100;
 
-    // Store the previous userPortfolio for comparison
-    prevUserPortfolioRef.current = userPortfolio;
+        return {
+          name: token?.symbol || '',
+          value,
+          key: `${token?.symbol || ''}-${index}`,
+        };
+      })
+      .filter(item => item.value > 0);
   }, [userPortfolio, tokens, prices]);
 
-  useEffect(() => {
-    // Check if the userPortfolio has changed
-    const prevUserPortfolio = prevUserPortfolioRef.current;
-    if (prevUserPortfolio.length !== userPortfolio.length) {
-      // Animate the changes
-      setChartData(() => {
-        const newChartData = userPortfolio.map((holding, index) => {
-          const token = tokens[holding.token.symbol];
-          const price = prices[token?.symbol + 'USDT']?.price || prices[token?.symbol]?.price || 0;
-          const value = (holding.quantity * price) / prevUserPortfolio.reduce((total, h) => {
-            const t = tokens[h.token.symbol];
-            const p = prices[t?.symbol + 'USDT']?.price || prices[t?.symbol]?.price || 0;
-            return total + (h.quantity * p);
-          }, 0) * 100;
-          return {
-            name: token?.symbol || '',
-            value,
-            key: `${token?.symbol || ''}-${index}`,
-          };
-        });
-        return newChartData;
-      });
-    }
-  }, [userPortfolio, tokens, prices]);
+  if (!chartData.length) {
+    return null;
+  }
 
   return (
     <ResponsiveContainer width="100%" height={400}>
@@ -77,16 +49,16 @@ const DonutPortfolioChart: React.FC<DonutPortfolioChartProps> = ({ userPortfolio
           innerRadius={60}
           outerRadius={100}
           fill="#8884d8"
-          label={({ name, value }) => `${name} (${value.toFixed(2)}%)`}
-          animationDuration={500} // Adjust the animation duration as needed
-          animationEasing="ease-out"
+          isAnimationActive={false}
+          label={({ name, value }) => `${name} (${value.toFixed(1)}%)`}
+          labelLine={false}
         >
-          {chartData.map(({ key }) => (
-            <Cell key={key} fill={getColor(chartData.findIndex(item => item.key === key))} />
+          {chartData.map(({ key }, index) => (
+            <Cell key={key} fill={getColor(index)} />
           ))}
         </Pie>
         <Tooltip
-          formatter={(value: number) => `${value.toFixed(2)}%`}
+          formatter={(value: number) => `${value.toFixed(1)}%`}
           labelFormatter={(name: string) => name}
         />
         <Legend />

@@ -12,6 +12,7 @@ export default {
       },
       colors: {
         'grape': '#5E1AEB',
+        'darkborder': '#363636',
         'darkbtn': '#404040',
         'darkbg': '#2D2D2D',
         'darkbtnhov': '#525252',

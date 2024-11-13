@@ -106,7 +106,7 @@ const TokenOverview = () => {
 
   return (
     <div className="flex flex-col gap-2 text-3xl font-normal px-[15%] py-[0.5%] h-full">
-      <div className="flex flex-col gap-4 bg-lightnav dark:bg-darklabel rounded-md py-[1%] px-[2%]">
+      <div className="flex flex-col gap-3 bg-lightnav dark:bg-darklabel border-2 border-gray-200 dark:border-darkborder rounded-md py-[1%] px-[2%]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img
@@ -121,12 +121,12 @@ const TokenOverview = () => {
               </span>
             </h1>
           </div>
-          <div className="flex gap-4 text-black dark:text-white">
+          <div className="flex gap-2 text-black dark:text-white">
             <button
               onClick={() =>
                 window.open(tokenMetadata.urls.website[0], '_blank')
               }
-              className="flex items-center gap-2 text-[1.5rem] text-black dark:text-white bg-lightlisthov dark:bg-darkbtnhov rounded-lg hover:bg-violet hover:dark:bg-elixir p-2"
+              className="flex items-center gap-2 text-[1.5rem] text-black dark:text-white bg-lightlisthov dark:bg-darkbtnhov rounded-lg border-2 border-gray-300 dark:border-darkborder hover:bg-violet hover:dark:bg-elixir p-2"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -148,7 +148,7 @@ const TokenOverview = () => {
               onClick={() =>
                 window.open(tokenMetadata.urls.technical_doc[0], '_blank')
               }
-              className="flex items-center gap-2 text-[1.5rem] text-black dark:text-white bg-lightlisthov dark:bg-darkbtnhov rounded-lg hover:bg-violet hover:dark:bg-elixir p-2"
+              className="flex items-center gap-2 text-[1.5rem] text-black dark:text-white bg-lightlisthov dark:bg-darkbtnhov rounded-lg border-2 border-gray-300 dark:border-darkborder hover:bg-violet hover:dark:bg-elixir p-2"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -171,7 +171,7 @@ const TokenOverview = () => {
         <div className="flex">
           {/* Left part (purple sections) */}
           <div className="grid grid-cols-2 gap-3 text-black text-center text-xl flex-grow">
-            <div className="bg-violet dark:bg-elixir rounded-lg p-4">
+            <div className="bg-violet dark:bg-elixir border-2 border-purple-300 dark:border-purple-900 rounded-lg p-4">
               <h2 className="font-semibold">Price</h2>
               <p className="font-light">
                 {formatPrice(liveData?.price ?? tokenData.quote.USD.price)}
@@ -181,23 +181,23 @@ const TokenOverview = () => {
               <h2 className="font-semibold">Market Cap</h2>
               <p className="font-light">
                 {liveData?.price && tokenData?.circulating_supply
-                  ? abbreviateNumber(
+                  ? abbreviateCurrency(
                       liveData.price * tokenData.circulating_supply
                     )
                   : 'Loading...'}
               </p>
             </div>
-            <div className="bg-violet dark:bg-elixir rounded-lg p-4">
+            <div className="bg-violet dark:bg-elixir border-2 border-purple-300 dark:border-purple-900 rounded-lg p-4">
               <h2 className="font-semibold">Volume (24hr)</h2>
               <p className="font-light">
                 {abbreviateCurrency(tokenData.quote.USD.volume_24h)}
               </p>
             </div>
-            <div className="bg-violet dark:bg-elixir rounded-lg p-4">
+            <div className="bg-violet dark:bg-elixir border-2 border-purple-300 dark:border-purple-900 rounded-lg p-4">
               <h2 className="font-semibold">Volume Change % (24hr)</h2>
               <p className='font-light'>{formatPriceChange(tokenData.quote.USD.volume_change_24h)}</p>
             </div>
-            <div className="bg-violet dark:bg-elixir rounded-lg p-4">
+            <div className="bg-violet dark:bg-elixir border-2 border-purple-300 dark:border-purple-900 rounded-lg p-4">
               {' '}
               <h2 className="font-semibold">Circulating Supply</h2>{' '}
               <p className="font-light">
@@ -208,7 +208,7 @@ const TokenOverview = () => {
                 </span>{' '}
               </p>{' '}
             </div>{' '}
-            <div className="bg-violet dark:bg-elixir rounded-lg p-4">
+            <div className="bg-violet dark:bg-elixir border-2 border-purple-300 dark:border-purple-900 rounded-lg p-4">
               {' '}
               <h2 className="font-semibold">Max. Supply</h2>{' '}
               <p className='font-light'>
@@ -224,7 +224,7 @@ const TokenOverview = () => {
           </div>
 
           {/* Price Change % section on the right */}
-          <div className="flex flex-col gap- w-[25%] bg-lightlisthov dark:bg-darkbtnhov text-start text-[1.6rem] text-black dark:text-stone rounded-lg p-4 ml-10">
+          <div className="flex flex-col gap- w-[25%] bg-lightlisthov dark:bg-darkbtnhov text-start text-[1.6rem] text-black dark:text-stone border-2 border-gray-300 dark:border-darkborder rounded-lg p-4 ml-10">
             <h2 className="font-semibold dark:text-white">Price Change %</h2>
             <p>
               1h:{' '}

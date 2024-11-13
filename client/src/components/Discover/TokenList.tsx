@@ -18,7 +18,6 @@ const TokenList = () => {
   // Fetch tokens
   useEffect(() => {
     let mounted = true;
-    console.log('TokenList useEffect running');
     const fetchInitialData = async () => {
       const baseUrl = 'http://localhost:3001/api/';
       try {
@@ -33,19 +32,13 @@ const TokenList = () => {
           .map((token: Token) => token.id.toString())
           .join(',');
 
-        console.log('Token IDs being requested:', tokenIds);
-
         // Fetch metadata using context
         const metadataData = await getBatchMetadata(tokenIds);
         if (!mounted) return;
 
-        console.log('Metadata received:', metadataData);
-
         // Map the metadata correctly to each token
         const mappedMetadata = tokenData.data.map((token: Token) => {
           const tokenMetadata = metadataData[token.id.toString()];
-          console.log(`Mapping metadata for token ${token.symbol}:`, tokenMetadata);
-
           return {
             id: token.id,
             logo: tokenMetadata?.logo || '',
@@ -54,8 +47,6 @@ const TokenList = () => {
             urls: tokenMetadata?.urls || { website: [], technical_doc: [] },
           };
         });
-
-        console.log('Final mapped metadata:', mappedMetadata);
 
         setMetadata(mappedMetadata);
         const priceData = tokenData.data.reduce(
@@ -115,6 +106,8 @@ const TokenList = () => {
   }
 
   return (
+    <>
+    <hr className='border-lightnav dark:border-darkborder'/>
     <table className="table-auto w-full text-left border-separate border-spacing-y-[2vh]">
       <thead>
         <tr className="text-xl">
@@ -142,6 +135,7 @@ const TokenList = () => {
         })}
       </tbody>
     </table>
+    </>
   );
 };
 

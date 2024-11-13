@@ -12,17 +12,19 @@ export const formatPrice = (value: number): string => {
     '9': '₉',
   };
 
-  // Format the currency with sufficient decimal places
+  // Set decimal places based on value threshold
+  const fractionDigits = value > 100 ? 2 : 4;
+
+  // Format the currency with specified decimal places
   const formattedValue = new Intl.NumberFormat('en-US', {
     style: "currency",
     currency: "USD",
     minimumFractionDigits: 2,
-    maximumFractionDigits: 4,
+    maximumFractionDigits: fractionDigits,
   }).format(value);
 
-  // Check if the number is small
+  // Check if the number is very small and needs subscript formatting
   if (value < 0.1) {
-    // Separate main part and last digit
     const mainPart = formattedValue.slice(0, -1);
     const lastDigit = formattedValue.slice(-1);
 
@@ -30,5 +32,6 @@ export const formatPrice = (value: number): string => {
 
     return mainPart + subscriptedLastDigit;
   }
+
   return formattedValue;
 };

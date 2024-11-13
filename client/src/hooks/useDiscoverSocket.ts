@@ -1,23 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { PriceData } from '../types/sockets/PriceData';
 import Token from '../types/api/Token';
+import PortfolioToken from '../types/api/Portfolio';
 
-interface Holding {
-  token: {
-    symbol: string;
-  };
-  quantity: number;
-}
+type Holding = PortfolioToken['holdings'][0];
 
-type SocketInput = Token[] | Holding[];
-
-const useDiscoverSocket = (input: SocketInput) => {
+const useDiscoverSocket = (input: Token[] | Holding[]) => {
   const [priceData, setPriceData] = useState<Record<string, PriceData>>({});
+  const socketRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
     if (input.length === 0) return;
 
-    // Handle both Token[] and Holding[] cases
+    // Create the stream URL
     const streamUrl = `wss://stream.binance.com:9443/ws/${input
       .map(item => {
         const symbol = 'symbol' in item ? item.symbol : item.token.symbol;
@@ -25,7 +20,18 @@ const useDiscoverSocket = (input: SocketInput) => {
       })
       .join('/')}`;
 
+    // If we already have a connection with the same URL, don't reconnect
+    if (socketRef.current?.url === streamUrl && socketRef.current.readyState === WebSocket.OPEN) {
+      return;
+    }
+
+    // Close existing connection if URL changed
+    if (socketRef.current) {
+      socketRef.current.close();
+    }
+
     const socket = new WebSocket(streamUrl);
+    socketRef.current = socket;
 
     socket.onopen = () => {
       console.log('WebSocket connection opened');
@@ -85,7 +91,10 @@ const useDiscoverSocket = (input: SocketInput) => {
     };
 
     return () => {
-      socket.close();
+      if (socketRef.current?.readyState === WebSocket.OPEN) {
+        socketRef.current.close();
+      }
+      socketRef.current = null;
     };
   }, [input]);
 
