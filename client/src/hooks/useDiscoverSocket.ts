@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
-import { PriceData } from '../types/sockets/PriceData';
-import Token from '../types/api/Token';
-import PortfolioToken from '../types/api/Portfolio';
+import type { PriceData } from '../types/sockets/PriceData';
+import type Token from '../types/api/Token';
+import type PortfolioToken from '../types/api/Portfolio';
 
 type Holding = PortfolioToken['holdings'][0];
 

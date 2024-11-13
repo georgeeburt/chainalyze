@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ChartData } from "../types/sockets/ChartData";
+import type { ChartData } from "../types/sockets/ChartData";
 
 const useChartSocket = (symbol: string) => {
   const [data, setData] = useState<ChartData[]>([]);
