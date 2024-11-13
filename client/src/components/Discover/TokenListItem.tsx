@@ -1,8 +1,8 @@
-import TokenListItemProps from '../../types/props/TokenListItemProps';
 import { Link } from 'react-router-dom';
 import { formatPrice } from '../../utils/formatters/formatPrice';
 import { formatPriceChange } from '../../utils/formatters/formatPriceChange';
 import { formatMarketCap } from '../../utils/formatters/formatMarketCap';
+import type TokenListItemProps from '../../types/props/TokenListItemProps';
 
 const TokenListItem = ({
   token,

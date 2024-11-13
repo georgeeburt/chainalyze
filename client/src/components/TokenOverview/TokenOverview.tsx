@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { AreaData, Time } from 'lightweight-charts';
+
+import type { Metadata } from '../../types/api/Metadata';
+import type { KlineData } from '../../types/api/KlineData';
+import type Token from '../../types/api/Token';
+// Import components/hooks
 import Chart from './Chart';
 import useChartSocket from '../../hooks/useChartSocket';
 import useMetadata from '../../hooks/useMetadata';
-import { Metadata } from '../../types/api/Metadata';
-import { KlineData } from '../../types/api/KlineData';
-import Token from '../../types/api/Token';
+import Loading from '../common/Loading';
+// Import helpers
 import { formatPriceChange } from '../../utils/formatters/formatPriceChange';
 import { formatPrice } from '../../utils/formatters/formatPrice';
 import { abbreviateCurrency } from '../../utils/numberAbbreviators/abbreviateCurrency';
@@ -98,9 +102,7 @@ const TokenOverview = () => {
 
   if (loading || !tokenMetadata || !tokenData) {
     return (
-      <div className="flex justify-center items-center h-screen transform -translate-y-6">
-        <div className="w-12 h-12 border-4 border-elixir border-t-transparent rounded-full animate-spin"></div>
-      </div>
+      <Loading />
     );
   }
 

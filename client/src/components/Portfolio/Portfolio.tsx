@@ -6,13 +6,14 @@ import type { Metadata } from '../../types/api/Metadata';
 import type PortfolioToken from '../../types/api/Portfolio';
 import type { PriceData } from '../../types/sockets/PriceData';
 
-// Import components;
+// Import components
 import MessageToast from '../common/MessageToast';
 import CurrentHoldings from './CurrentHoldings';
 import AddTokenForm from './AddTokenForm';
 import PortfolioStats from './PortfolioStats';
 import DonutPortfolioChart from './DonutPortfolioChart';
 import BarPortfolioChart from './BarPortfolioChart';
+import Loading from '../common/Loading';
 
 const Portfolio = () => {
   // Core state
@@ -238,9 +239,7 @@ const Portfolio = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen transform -translate-y-6">
-        <div className="w-12 h-12 border-4 border-elixir border-t-transparent rounded-full animate-spin"></div>
-      </div>
+      <Loading />
     );
   }
 

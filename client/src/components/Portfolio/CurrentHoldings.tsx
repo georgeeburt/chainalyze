@@ -1,8 +1,8 @@
 // components/portfolio/CurrentHoldings.tsx
-import { Metadata } from '../../types/api/Metadata';
-import { PriceData } from '../../types/sockets/PriceData';
-import PortfolioToken from '../../types/api/Portfolio';
 import HoldingCard from './HoldingCard';
+import type { Metadata } from '../../types/api/Metadata';
+import type { PriceData } from '../../types/sockets/PriceData';
+import type PortfolioToken from '../../types/api/Portfolio';
 
 interface CurrentHoldingsProps {
   holdings: PortfolioToken['holdings'];

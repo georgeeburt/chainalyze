@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import Token from "../../types/api/Token";
+import type Token from "../../types/api/Token";
 
 interface AddTokenFormProps {
   tokenList: Token[];

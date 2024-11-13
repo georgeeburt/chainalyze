@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
-import Token from '../../types/api/Token';
-import { Metadata } from '../../types/api/Metadata';
+import type { PriceData } from '../../types/sockets/PriceData';
+import type { Metadata } from '../../types/api/Metadata';
+import type Token from '../../types/api/Token';
+
+// Import components/hooks
 import TokenListItem from './TokenListItem';
-import { PriceData } from '../../types/sockets/PriceData';
-import useDiscoverSocket from '../../hooks/useDiscoverSocket';
+import Loading from '../common/Loading';
 import useMetadata from '../../hooks/useMetadata';
+import useDiscoverSocket from '../../hooks/useDiscoverSocket';
 
 const TokenList = () => {
   const [tokens, setTokens] = useState<Token[]>([]);
@@ -99,9 +102,7 @@ const TokenList = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-[80vh] mt-[-4rem]">
-        <div className="w-12 h-12 border-4 border-elixir border-t-transparent rounded-full animate-spin"></div>
-      </div>
+      <Loading />
     );
   }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { PriceData } from '../../types/sockets/PriceData';
-import PortfolioToken from '../../types/api/Portfolio';
+import type { PriceData } from '../../types/sockets/PriceData';
+import type PortfolioToken from '../../types/api/Portfolio';
 
 interface BarChartProps {
   userPortfolio: PortfolioToken['holdings'];

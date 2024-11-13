@@ -1,5 +1,5 @@
-import { formatPrice } from '../../utils/formatters/formatPrice';
 import StatItem from './StatItem';
+import { formatPrice } from '../../utils/formatters/formatPrice';
 
 interface PortfolioStatsProps {
   totalValue: number;

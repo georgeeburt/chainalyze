@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { PieChart, Pie, Tooltip, Legend, Cell, ResponsiveContainer } from 'recharts';
-import DonutPortfolioChartProps from '../../types/props/DonutChartPortfolioProps';
+import type DonutPortfolioChartProps from '../../types/props/DonutChartPortfolioProps';
 
 const COLORS = ['#8C52FF', '#B14BFF', '#D452FF', '#FF52E9', '#FF52B1', '#A364FF'];
 
