@@ -32,7 +32,7 @@ const BarPortfolioChart: React.FC<BarChartProps> = ({ userPortfolio, prices }) =
   };
 
   return (
-    <div className="flex flex-col gap-10 bg-lightnav dark:bg-darkbtn border-2 dark:border-darkborder rounded-lg p-8">
+    <div className="flex flex-col gap-10 bg-lightlisthov dark:bg-darkbtn border-2 border-gray-300 dark:border-darkborder rounded-lg p-8">
       <h2 className="text-5xl font-semibold">Holdings Value</h2>
       <div className="h-[300px] w-full">
         <ResponsiveContainer width="100%" height="100%">
