@@ -38,3 +38,7 @@ npm run start:all
 |`PORT`        | Port to listen to when running the backend. | `3001`                                 |
 |`MONGO_URI`   | Your MongoDB URI connection string.         | `mongodb://localhost:27017/chainalyze` |
 |`CMC_API_KEY` | Your CoinMarketCap API key.                 | `88g72h2-v402-92x3-n92z-73484oc83k`    |
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE.md) file for details.
