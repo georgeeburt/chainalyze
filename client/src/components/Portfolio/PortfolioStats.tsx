@@ -8,7 +8,7 @@ interface PortfolioStatsProps {
 }
 
 const PortfolioStats = ({ totalValue, valueChange, topEarner }: PortfolioStatsProps) => (
-  <div className="flex flex-col gap-6 bg-lightlisthov dark:bg-darkbtnhov border-2 border-gray-300 dark:border-darkborder rounded-lg p-8">
+  <div className="flex flex-col gap-6 bg-lightlisthov dark:bg-darklabel border-2 border-gray-300 dark:border-darkborder rounded-lg p-8">
     <h3 className="text-4xl font-semibold">Portfolio Statistics</h3>
     <div className="flex flex-col gap-3">
       <StatItem

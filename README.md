@@ -20,21 +20,13 @@ cd chainalyze
 
 ### 2. Server and Client setup
 
-Within the project root directory, run the following command:
+In the project root directory, run the following command:
 ```bash
 npm run install:all
 ```
 
 ## Usage
-### 1. Run the server
-Within the project root directory, run the following command:
+In the project root directory, run the following command:
 ```bash
-nodemon
-```
-
-### 2. Start the Client
-From the project root directory, run the following commands:
-```bash
-cd client
-npm install
+npm run start:all
 ```

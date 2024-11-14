@@ -22,7 +22,7 @@ const ThemeButton = ({ isDarkMode, setIsDarkMode }: ThemeButtonProps) => {
             <path
               id="dark-mode"
               d="M53 26.5C53 41.1355 41.1355 53 26.5 53C11.8645 53 0 41.1355 0 26.5C0 11.8645 11.8645 0 26.5 0C41.1355 0 53 11.8645 53 26.5Z"
-              className="fill-darkbtn group-hover:fill-darkbtnhov transition-colors duration-200"
+              className="group-hover:fill-darkbtnhov transition-colors duration-200"
             />
             {/* sun icon */}
             <path
@@ -49,7 +49,7 @@ const ThemeButton = ({ isDarkMode, setIsDarkMode }: ThemeButtonProps) => {
             {/* round background */}
             <path
               d="M53 26.5C53 41.1355 41.1355 53 26.5 53C11.8645 53 0 41.1355 0 26.5C0 11.8645 11.8645 0 26.5 0C41.1355 0 53 11.8645 53 26.5Z"
-              className="fill-lightbtn group-hover:fill-lightbtnhov transition-colors duration-200"
+              className="group-hover:fill-lightbtnhov transition-colors duration-200"
             />
             {/* moon icon */}
             <path

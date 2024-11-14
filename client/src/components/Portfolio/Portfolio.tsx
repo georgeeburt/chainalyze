@@ -7,12 +7,13 @@ import type PortfolioToken from '../../types/api/Portfolio';
 import type { PriceData } from '../../types/sockets/PriceData';
 
 // Import components
-import MessageToast from '../common/MessageToast';
+import PortfolioHeader from './PortfolioHeader';
 import CurrentHoldings from './CurrentHoldings';
 import AddTokenForm from './AddTokenForm';
 import PortfolioStats from './PortfolioStats';
 import DonutPortfolioChart from './DonutPortfolioChart';
 import BarPortfolioChart from './BarPortfolioChart';
+import MessageToast from '../common/MessageToast';
 import Loading from '../common/Loading';
 
 const Portfolio = () => {
@@ -252,7 +253,7 @@ const Portfolio = () => {
       />
 
       <div className="flex flex-col gap-6 px-[15%] py-[2%] h-full">
-        <h1 className='text-6xl font-semibold'>Portfolio</h1>
+        <PortfolioHeader />
 
         <div className="flex gap-6">
           <CurrentHoldings

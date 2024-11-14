@@ -97,7 +97,6 @@ const Chart = ({ historicalData, socketData }: ChartProps) => {
 
     const latestData = socketData[socketData.length - 1];
     if (!latestData?.k) return;
-
     const chartData: AreaData = {
       time: Math.floor(Number(latestData.k.t) / 1000) as Time,
       value: parseFloat(latestData.k.c)
