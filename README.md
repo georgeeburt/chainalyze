@@ -30,3 +30,11 @@ In the project root directory, run the following command:
 ```bash
 npm run start:all
 ```
+
+## Environment Variables
+
+|Variable      | Description                                 | Example                                |
+|--------------|---------------------------------------------|----------------------------------------|
+|`PORT`        | Port to listen to when running the backend. | `3001`                                 |
+|`MONGO_URI`   | Your MongoDB URI connection string.         | `mongodb://localhost:27017/chainalyze` |
+|`CMC_API_KEY` | Your CoinMarketCap API key.                 | `88g72h2-v402-92x3-n92z-73484oc83k`    |
