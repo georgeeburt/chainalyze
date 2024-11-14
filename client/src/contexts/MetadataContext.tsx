@@ -1,6 +1,6 @@
 import { createContext, useState, useCallback } from 'react';
-import { Metadata } from '../../types/api/Metadata';
-import MetadataContextType from '../../types/contexts/metadataContextType';
+import { Metadata } from '../types/api/Metadata';
+import MetadataContextType from '../types/contexts/metadataContextType';
 
 interface MetadataResponseItem {
   logo: string;

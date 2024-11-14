@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { MetadataContext } from '../components/contexts/MetadataContext';
+import { MetadataContext } from '../contexts/MetadataContext';
 
 const useMetadata = () => {
   const context = useContext(MetadataContext);

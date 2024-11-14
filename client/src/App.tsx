@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { MetadataProvider } from './components/contexts/MetadataContext';
+import { MetadataProvider } from './contexts/MetadataContext';
 import Discover from './components/Discover/Discover';
 import Navbar from './components/Navbar/Navbar';
 import TokenOverview from './components/TokenOverview/TokenOverview';
