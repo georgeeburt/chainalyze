@@ -19,13 +19,13 @@ app.use('/', async (req: Request<any>, res: Response<any>): Promise<any> => {
   return res.status(404).json({ error: 'Not found'});
 });
 
-connectDB().then(() => {
-  const PORT = process.env.PORT || 3001;
-  app.listen(PORT, () => {
-    try {
+if (process.env.NODE_ENV !== 'test') {
+  connectDB().then(() => {
+    const PORT = process.env.PORT || 3001;
+    app.listen(PORT, () => {
       console.log('🚀 Server listening at http://localhost:' + PORT);
-    } catch (err) {
-      console.error('Error starting the server:', err);
-    }
+    });
   });
-});
+}
+
+export default app;
