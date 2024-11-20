@@ -35,8 +35,6 @@ const TokenOverview = () => {
       }
     : null;
 
-  const baseUrl = 'http://localhost:3001/api/';
-
   useEffect(() => {
     const loadMetadata = async () => {
       if (!id) return;
@@ -63,7 +61,7 @@ const TokenOverview = () => {
     const fetchTokenData = async () => {
       try {
         const response = await fetch(
-          `${baseUrl}tokens?symbol=${symbol.toUpperCase()}`
+          `${import.meta.env.VITE_BACKEND_URL}/tokens?symbol=${symbol.toUpperCase()}`
         );
         if (!response.ok) throw new Error('Failed to fetch token data');
         const tokenInfo = await response.json();
@@ -83,7 +81,7 @@ const TokenOverview = () => {
     const fetchHistoricalData = async () => {
       try {
         const response = await fetch(
-          `https://api.binance.com/api/v3/klines?symbol=${symbol.toUpperCase()}USDT&interval=1s&limit=1000`
+          `${import.meta.env.VITE_BINANCE_KLINE_URL}${symbol.toUpperCase()}USDT&interval=1s&limit=1000`
         );
         const data: KlineData[] = await response.json();
         const chartData = data.map(item => ({

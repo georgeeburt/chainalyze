@@ -13,7 +13,7 @@ const useDiscoverSocket = (input: Token[] | Holding[]) => {
     if (input.length === 0) return;
 
     // Create the stream URL
-    const streamUrl = `wss://stream.binance.com:9443/ws/${input
+    const streamUrl = `${import.meta.env.VITE_BINANCE_WSS_URL}/${input
       .map(item => {
         const symbol = 'symbol' in item ? item.symbol : item.token.symbol;
         return `${symbol.toLowerCase()}usdt@ticker`;

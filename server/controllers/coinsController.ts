@@ -1,9 +1,12 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const getCoins = async (req: Request, res: Response): Promise<any> => {
   try {
-    const baseUrl = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/';
+    const baseUrl = process.env.CMC_API_TOKENS_URL;
     let { symbol } = req.query;
 
     // Handle if symbol is an array

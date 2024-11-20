@@ -54,12 +54,10 @@ const Portfolio = () => {
     .filter((token): token is Token => token !== undefined);
   const livePriceData = useDiscoverSocket(portfolioTokens);
 
-  const baseUrl = 'http://localhost:3001';
-
   // Handlers
   const handleDeleteToken = async (tokenName: string) => {
     try {
-      const response = await fetch(`${baseUrl}/portfolio`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_PORTFOLIO_URL}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: tokenName })
@@ -89,7 +87,7 @@ const Portfolio = () => {
     }
 
     try {
-      const response = await fetch(`${baseUrl}/portfolio`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_PORTFOLIO_URL}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -146,12 +144,12 @@ const Portfolio = () => {
     const fetchInitialData = async () => {
       try {
         // Fetch tokens
-        const tokensResponse = await fetch(`${baseUrl}/api/tokens`);
+        const tokensResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tokens`);
         const tokensData = await tokensResponse.json();
         setTokenList(tokensData.data);
 
         // Fetch portfolio
-        const portfolioResponse = await fetch(`${baseUrl}/portfolio`);
+        const portfolioResponse = await fetch(`${import.meta.env.VITE_BACKEND_PORTFOLIO_URL}`);
         const portfolioData = await portfolioResponse.json();
 
         if (portfolioData?.portfolio.holdings) {

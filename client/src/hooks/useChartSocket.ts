@@ -7,7 +7,7 @@ const useChartSocket = (symbol: string) => {
   useEffect(() => {
     if (!symbol) return;
 
-    const socket = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol.toLowerCase() + 'usdt'}@kline_1s`);
+    const socket = new WebSocket(`${import.meta.env.VITE_BINANCE_WSS_URL}/${symbol.toLowerCase() + 'usdt'}@kline_1s`);
 
     socket.onmessage = (event) => {
       const receivedData = JSON.parse(event.data);

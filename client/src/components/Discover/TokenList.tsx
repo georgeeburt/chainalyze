@@ -10,6 +10,7 @@ import useMetadata from '../../hooks/useMetadata';
 import useDiscoverSocket from '../../hooks/useDiscoverSocket';
 
 const TokenList = () => {
+  console.log(import.meta.env.VITE_BACKEND_URL);
   const [tokens, setTokens] = useState<Token[]>([]);
   const [metadata, setMetadata] = useState<Metadata[]>([]);
   const [loading, setLoading] = useState(true);
@@ -22,9 +23,8 @@ const TokenList = () => {
   useEffect(() => {
     let mounted = true;
     const fetchInitialData = async () => {
-      const baseUrl = 'http://localhost:3001/api/';
       try {
-        const response = await fetch(`${baseUrl}tokens`);
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tokens`);
         if (!response.ok) throw new Error('Failed to fetch tokens');
         const tokenData = await response.json();
         if (!mounted) return;

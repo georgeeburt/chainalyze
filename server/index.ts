@@ -10,7 +10,7 @@ const app = express();
 dotenv.config();
 
 app.use(cors({
-  origin: 'http://localhost:5173'
+  origin: process.env.CLIENT_ENDPOINT
 }));
 app.use(express.json());
 app.use(morgan('dev'));

@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
+import dotenv from 'dotenv';
 
+dotenv.config();
 
 const getTokenMetadata = async (req: Request, res: Response): Promise<any> => {
   try {
     const tokenIds = req.query.id
-    const metadataResponse = await fetch(`https://pro-api.coinmarketcap.com/v2/cryptocurrency/info?id=${tokenIds}`,
+    const metadataResponse = await fetch(`${process.env.CMC_METADATA_API_URL}?id=${tokenIds}`,
       {
         headers: {
           'X-CMC_PRO_API_KEY': process.env.CMC_API_KEY as string,

@@ -2,6 +2,7 @@ import { createContext, useState, useCallback } from 'react';
 import { Metadata } from '../types/api/Metadata';
 import MetadataContextType from '../types/contexts/metadataContextType';
 
+
 interface MetadataResponseItem {
   logo: string;
   name: string;
@@ -25,7 +26,7 @@ export const MetadataProvider = ({ children }: { children: React.ReactNode }) =>
 
   const getMetadata = useCallback(async (id: string): Promise<Metadata | null> => {
     try {
-      const response = await fetch(`http://localhost:3001/api/metadata?id=${id}`);
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/metadata?id=${id}`);
       const responseData: MetadataResponse = await response.json();
       const newMetadata = responseData?.data?.[id] || null;
 
@@ -54,7 +55,7 @@ export const MetadataProvider = ({ children }: { children: React.ReactNode }) =>
 
   const getBatchMetadata = useCallback(async (ids: string): Promise<{ [key: string]: Metadata }> => {
     try {
-      const response = await fetch(`http://localhost:3001/api/metadata?id=${ids}`);
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/metadata?id=${ids}`);
       const responseData: MetadataResponse = await response.json();
 
       const batchedMetadata: { [key: string]: Metadata } = {};
