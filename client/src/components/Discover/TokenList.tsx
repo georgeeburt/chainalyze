@@ -10,7 +10,6 @@ import useMetadata from '../../hooks/useMetadata';
 import useDiscoverSocket from '../../hooks/useDiscoverSocket';
 
 const TokenList = () => {
-  console.log(import.meta.env.VITE_BACKEND_URL);
   const [tokens, setTokens] = useState<Token[]>([]);
   const [metadata, setMetadata] = useState<Metadata[]>([]);
   const [loading, setLoading] = useState(true);
