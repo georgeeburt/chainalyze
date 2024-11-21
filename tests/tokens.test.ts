@@ -1,6 +1,5 @@
 import request from "supertest";
 import app from "../server/index.js";
-import connectDB from "../server/db.js";
 
 describe('Token API', () => {
   describe('GET /api/tokens', () => {
