@@ -13,7 +13,13 @@ const config: Config = {
   },
   extensionsToTreatAsEsm: ['.ts'],
   testMatch: ['**/tests/**/*.test.ts'],
-  modulePathIgnorePatterns: ['<rootDir>/client/']
+  modulePathIgnorePatterns: ['<rootDir>/client/'],
+  moduleFileExtensions: ['js', 'ts', 'json'],
+  globals: {
+    'ts-jest': {
+      isolatedModules: true,
+    },
+  },
 };
 
 export default config;

@@ -3,9 +3,6 @@ import app from "../server/index.js";
 import connectDB from "../server/db.js";
 
 describe('Token API', () => {
-  beforeAll(async () => {
-    await connectDB();
-  });
   describe('GET /api/tokens', () => {
     it('should return a list of tokens when no symbol is provided', async () => {
       const response = await request(app)
